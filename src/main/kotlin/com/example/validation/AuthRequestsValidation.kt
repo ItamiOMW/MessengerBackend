@@ -13,11 +13,11 @@ fun RequestValidationConfig.authRequestsValidation() {
         val email = registerRequest.email.trim()
         val password = registerRequest.password.trim()
 
-        if (email.isEmpty()) throw MissingArgumentsException
-        if (!email.isEmailValid()) throw InvalidEmailException
+        if (email.isEmpty()) throw InvalidEmailException("Empty email.")
+        if (!email.isEmailValid()) throw InvalidEmailException()
 
-        if (password.isEmpty()) throw MissingArgumentsException
-        if (password.length < 8) throw InvalidPasswordException
+        if (password.isEmpty()) throw InvalidPasswordException("Empty Password.")
+        if (password.length < 8) throw InvalidPasswordException("Short password. Length should be greater than 7.")
 
         ValidationResult.Valid
     }
@@ -25,8 +25,8 @@ fun RequestValidationConfig.authRequestsValidation() {
         val email = loginRequest.email.trim()
         val password = loginRequest.password.trim()
 
-        if (email.isEmpty()) throw MissingArgumentsException
-        if (password.isEmpty()) throw MissingArgumentsException
+        if (email.isEmpty()) throw InvalidEmailException("Empty email.")
+        if (password.isEmpty()) throw InvalidPasswordException("Empty Password.")
 
         ValidationResult.Valid
     }
@@ -34,10 +34,10 @@ fun RequestValidationConfig.authRequestsValidation() {
         val code = verifyEmailRequest.code
         val email = verifyEmailRequest.email
 
-        if (email.isEmpty()) throw MissingArgumentsException
+        if (email.isEmpty()) throw InvalidEmailException("Empty email.")
 
         if (code < Constants.MIN_CODE_VALUE || code > Constants.MAX_CODE_VALUE) {
-            throw InvalidVerificationCodeException
+            throw InvalidVerificationCodeException()
         }
 
         ValidationResult.Valid
@@ -46,7 +46,7 @@ fun RequestValidationConfig.authRequestsValidation() {
         val code = verifyPasswordResetCodeRequest.code
 
         if (code < Constants.MIN_CODE_VALUE || code > Constants.MAX_CODE_VALUE) {
-            throw InvalidPasswordResetCodeException
+            throw InvalidPasswordResetCodeException()
         }
 
         ValidationResult.Valid
@@ -54,15 +54,15 @@ fun RequestValidationConfig.authRequestsValidation() {
     validate<SendVerificationCodeRequest> { sendVerificationCodeRequest ->
         val email = sendVerificationCodeRequest.email
 
-        if (email.isEmpty()) throw MissingArgumentsException
+        if (email.isEmpty()) throw InvalidEmailException("Empty email.")
 
         ValidationResult.Valid
     }
     validate<ResetPasswordRequest> { resetPasswordRequest ->
         val password = resetPasswordRequest.newPassword
 
-        if (password.isEmpty()) throw MissingArgumentsException
-        if (password.length < 8) throw InvalidPasswordException
+        if (password.isEmpty()) throw InvalidPasswordException("Empty Password.")
+        if (password.length < 8) throw InvalidPasswordException("Short password. Length should be greater than 7.")
 
         ValidationResult.Valid
     }

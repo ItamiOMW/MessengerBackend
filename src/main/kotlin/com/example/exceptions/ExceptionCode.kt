@@ -7,9 +7,10 @@ data class ExceptionCode(
 
     companion object {
 
+
         // 400s
+        val BadRequest = ExceptionCode("400", "Bad Request")
         val MissingArguments = ExceptionCode("400.1", "Missing arguments")
-        val InvalidRegisterCredentials = ExceptionCode("400.2", "Invalid email or password.")
         val InvalidVerificationCode = ExceptionCode("400.3", "Invalid verification code.")
         val InvalidPasswordResetCode = ExceptionCode("400.4", "Invalid password reset code.")
         val InvalidEmail = ExceptionCode("400.5", "Invalid password email.")
@@ -19,13 +20,16 @@ data class ExceptionCode(
         val InvalidLoginCredentials = ExceptionCode("401.1", "Invalid email or password.")
 
         // 403s
+        val Forbidden = ExceptionCode("403", "Forbidden.")
         val UserNotActive = ExceptionCode("403.1", "User's account is not activated.")
         val PasswordResetNotAllowed = ExceptionCode("403.2", "Password reset is not allowed.")
 
         // 404s
+        val NotFound = ExceptionCode("404", "Not Found.")
         val UserDoesNotExist = ExceptionCode("404.1", "User with this email does not exists.")
 
         // 409s
+        val Conflict = ExceptionCode("409", "Conflict.")
         val UserAlreadyExists = ExceptionCode("409.1", "User with this email already exists.")
 
     }

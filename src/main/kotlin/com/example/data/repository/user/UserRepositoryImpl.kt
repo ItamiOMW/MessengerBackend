@@ -13,7 +13,7 @@ class UserRepositoryImpl : UserRepository {
         dbQuery {
             Users.insert { table ->
                 table[email] = user.email
-                table[hashPassword] = user.hashedPassword
+                table[hashPassword] = user.hashPassword
                 table[fullName] = user.fullName
                 table[username] = user.username
                 table[bio] = user.bio
@@ -23,14 +23,15 @@ class UserRepositoryImpl : UserRepository {
                 table[isPasswordResetAllowed] = user.isPasswordResetAllowed
                 table[isActive] = user.isActive
                 table[isAdmin] = user.isAdmin
+                table[lastActivity] = user.lastActivity
             }
         }
     }
 
-    override suspend fun updateUser(updateUser: UpdateUser, email: String): User? {
+    override suspend fun updateUser(updateUser: UpdateUser, id: Int): User? {
         val rowsUpdated = dbQuery {
-            Users.update({ Users.email eq email }) { table ->
-                table[hashPassword] = updateUser.hashedPassword
+            Users.update({ Users.id eq id }) { table ->
+                table[hashPassword] = updateUser.hashPassword
                 table[fullName] = updateUser.fullName
                 table[username] = updateUser.username
                 table[bio] = updateUser.bio
@@ -41,13 +42,21 @@ class UserRepositoryImpl : UserRepository {
                 table[isActive] = updateUser.isActive
             }
         }
-        return if (rowsUpdated > 0) getUserByEmail(email) else null
+        return if (rowsUpdated > 0) getUserById(id) else null
     }
 
     override suspend fun getUserByEmail(email: String): User? {
         return dbQuery {
             Users.select {
                 Users.email eq email
+            }.firstOrNull().toUser()
+        }
+    }
+
+    override suspend fun getUserById(id: Int): User? {
+        return dbQuery {
+            Users.select {
+                Users.id eq id
             }.firstOrNull().toUser()
         }
     }

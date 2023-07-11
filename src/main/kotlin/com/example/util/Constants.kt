@@ -14,9 +14,11 @@ object Constants {
     const val EMAIL_HOST_PASSWORD_KEY = "EMAIL_HOST_PASSWORD"
     const val EMAIL_HOST_KEY = "EMAIL_HOST"
 
-    const val UNKNOWN_ID = -1L
+    const val UNKNOWN_ID = -1
 
     const val MAX_CODE_VALUE = 99999
     const val MIN_CODE_VALUE = 10000
+
+    const val DEFAULT_TIMEZONE = "UTC"
 
 }

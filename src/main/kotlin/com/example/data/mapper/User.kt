@@ -3,8 +3,10 @@ package com.example.data.mapper
 import com.example.data.database.table.Users
 import com.example.data.model.UpdateUser
 import com.example.data.model.User
-import com.example.data.response.UserResponse
+import com.example.data.response.MyUserResponse
+import com.example.data.response.SimpleUserResponse
 import org.jetbrains.exposed.sql.ResultRow
+import java.time.ZoneOffset
 
 fun ResultRow?.toUser(): User? {
 
@@ -15,7 +17,7 @@ fun ResultRow?.toUser(): User? {
     return User(
         id = this[Users.id],
         email = this[Users.email],
-        hashedPassword = this[Users.hashPassword],
+        hashPassword = this[Users.hashPassword],
         fullName = this[Users.fullName],
         username = this[Users.username],
         bio = this[Users.bio],
@@ -24,13 +26,15 @@ fun ResultRow?.toUser(): User? {
         isAdmin = this[Users.isAdmin],
         emailVerificationCode = this[Users.emailVerificationCode],
         passwordResetCode = this[Users.passwordResetCode],
-        isPasswordResetAllowed = this[Users.isPasswordResetAllowed]
+        isPasswordResetAllowed = this[Users.isPasswordResetAllowed],
+        lastActivity = this[Users.lastActivity]
     )
 }
 
+
 fun User.toUpdateUser(): UpdateUser = UpdateUser(
     profilePictureUrl = this.profilePictureUrl,
-    hashedPassword = this.hashedPassword,
+    hashPassword = this.hashPassword,
     fullName = this.fullName,
     username = this.username,
     bio = this.bio,
@@ -40,7 +44,7 @@ fun User.toUpdateUser(): UpdateUser = UpdateUser(
     isPasswordResetAllowed = this.isPasswordResetAllowed
 )
 
-fun User.toUserResponse(): UserResponse = UserResponse(
+fun User.toMyUserResponse(): MyUserResponse = MyUserResponse(
     id = this.id,
     email = this.email,
     fullName = this.fullName,
@@ -49,5 +53,13 @@ fun User.toUserResponse(): UserResponse = UserResponse(
     profilePictureUrl = this.profilePictureUrl,
     isAdmin = this.isAdmin,
     isActive = this.isActive,
-    isPasswordResetAllowed = this.isPasswordResetAllowed
+    isPasswordResetAllowed = this.isPasswordResetAllowed,
+)
+
+fun User.toSimpleUserResponse(): SimpleUserResponse = SimpleUserResponse(
+    id = this.id,
+    fullName = this.fullName,
+    username = this.username,
+    profilePictureUrl = this.profilePictureUrl,
+    lastActivity = this.lastActivity.toEpochSecond(ZoneOffset.UTC)
 )

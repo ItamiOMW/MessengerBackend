@@ -1,19 +1,18 @@
 package com.example.data.model
 
 import com.example.util.Constants
-import io.ktor.server.auth.*
-import kotlinx.serialization.Serializable
+import java.time.LocalDateTime
 
-@Serializable
 data class User(
-    val id: Long = Constants.UNKNOWN_ID,
+    val id: Int = Constants.UNKNOWN_ID,
     val email: String,
-    val hashedPassword: String,
+    val hashPassword: String,
 
     val fullName: String,
     val username: String? = null,
     val bio: String? = null,
     val profilePictureUrl: String? = null,
+    val lastActivity: LocalDateTime,
 
     val isActive: Boolean = false,
     val isAdmin: Boolean = false,
@@ -21,4 +20,4 @@ data class User(
 
     val emailVerificationCode: Int? = null,
     val passwordResetCode: Int? = null,
-): Principal
+)
