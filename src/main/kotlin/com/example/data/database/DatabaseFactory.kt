@@ -1,5 +1,7 @@
 package com.example.data.database
 
+import com.example.data.database.table.ContactRequests
+import com.example.data.database.table.Contacts
 import com.example.util.Constants
 import com.example.data.database.table.Users
 import com.zaxxer.hikari.HikariConfig
@@ -17,6 +19,8 @@ object DatabaseFactory {
 
         transaction {
             SchemaUtils.create(Users)
+            SchemaUtils.create(ContactRequests)
+            SchemaUtils.create(Contacts)
         }
     }
 

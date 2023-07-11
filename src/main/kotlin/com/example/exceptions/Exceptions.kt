@@ -3,62 +3,33 @@ package com.example.exceptions
 import io.ktor.http.*
 
 
-object UserAlreadyExistsException : AppException(
-    message = "A user with this email already exists.",
-    exceptionCode = ExceptionCode.UserAlreadyExists.code,
-    httpStatusCode = HttpStatusCode.Conflict
-)
 
-object UserDoesNotExistException : AppException(
-    message = "A user with this email already exists.",
-    exceptionCode = ExceptionCode.UserAlreadyExists.code,
-    httpStatusCode = HttpStatusCode.Conflict
-)
-
-object InvalidLoginCredentialsException : AppException(
-    message = "Invalid email or password.",
-    exceptionCode = ExceptionCode.InvalidLoginCredentials.code,
-    httpStatusCode = HttpStatusCode.Unauthorized
-)
-
-object InvalidEmailException : AppException(
-    message = "Invalid email.",
-    exceptionCode = ExceptionCode.InvalidEmail.code,
-    httpStatusCode = HttpStatusCode.BadRequest
-)
-
-object InvalidPasswordException : AppException(
-    message = "Invalid password. Length should be greater than 7",
-    exceptionCode = ExceptionCode.InvalidPassword.code,
-    httpStatusCode = HttpStatusCode.BadRequest
-)
-
-object UserIsNotActiveException : AppException(
-    message = "User is not active.",
-    exceptionCode = ExceptionCode.UserNotActive.code,
+data class ForbiddenException(override val message: String = "Forbidden.") : AppException(
+    message = message,
+    exceptionCode = ExceptionCode.Forbidden.code,
     httpStatusCode = HttpStatusCode.Forbidden
 )
 
-object PasswordResetNotAllowedException : AppException(
-    message = "Password reset is not allowed.",
-    exceptionCode = ExceptionCode.PasswordResetNotAllowed.code,
-    httpStatusCode = HttpStatusCode.Forbidden
-)
-
-object InvalidVerificationCodeException : AppException(
-    message = "Invalid verification code.",
-    exceptionCode = ExceptionCode.InvalidVerificationCode.code,
+data class BadRequestException(override val message: String = "Bad Request.") : AppException(
+    message = message,
+    exceptionCode = ExceptionCode.BadRequest.code,
     httpStatusCode = HttpStatusCode.BadRequest
 )
 
-object InvalidPasswordResetCodeException : AppException(
-    message = "Invalid password reset code.",
-    exceptionCode = ExceptionCode.InvalidPasswordResetCode.code,
-    httpStatusCode = HttpStatusCode.BadRequest
+data class NotFoundException(override val message: String = "Not found.") : AppException(
+    message = message,
+    exceptionCode = ExceptionCode.NotFound.code,
+    httpStatusCode = HttpStatusCode.NotFound
 )
 
-object MissingArgumentsException : AppException(
-    message = "Missing arguments.",
+data class ConflictException(override val message: String = "Conflict.") : AppException(
+    message = message,
+    exceptionCode = ExceptionCode.Conflict.code,
+    httpStatusCode = HttpStatusCode.Conflict
+)
+
+data class MissingArgumentsException(override val message: String = "Missing arguments.") : AppException(
+    message = message,
     exceptionCode = ExceptionCode.MissingArguments.code,
     httpStatusCode = HttpStatusCode.BadRequest
 )

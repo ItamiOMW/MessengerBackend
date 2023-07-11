@@ -2,7 +2,7 @@ package com.example.data.model
 
 data class UpdateUser(
     val profilePictureUrl: String?,
-    val hashedPassword: String,
+    val hashPassword: String,
     val fullName: String,
     val username: String?,
     val bio: String?,

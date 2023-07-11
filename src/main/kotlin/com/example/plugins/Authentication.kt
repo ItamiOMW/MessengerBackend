@@ -1,12 +1,11 @@
 package com.example.plugins
 
+import com.example.authentication.JwtTokenManager
+import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
-import com.example.authentication.JwtTokenManager
-import com.example.service.UserService
-import io.ktor.server.application.*
 
-fun Application.configureAuthentication(userService: UserService) {
+fun Application.configureAuthentication() {
 
     val jwtTokenManager = JwtTokenManager()
 
@@ -14,8 +13,12 @@ fun Application.configureAuthentication(userService: UserService) {
         jwt {
             verifier(jwtTokenManager.verifier)
             validate { jwtCredential ->
-                jwtCredential.payload.getClaim("email").asString()?.let { email ->
-                    userService.getUserByEmail(email)
+                if (jwtCredential.payload.getClaim("email").asString() != null &&
+                    jwtCredential.payload.getClaim("id").asLong() != null
+                ) {
+                    JWTPrincipal(jwtCredential.payload)
+                } else {
+                    null
                 }
             }
         }
