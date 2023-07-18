@@ -20,4 +20,6 @@ data class User(
 
     val emailVerificationCode: Int? = null,
     val passwordResetCode: Int? = null,
+
+    val messagesPermission: MessagesPermission
 )

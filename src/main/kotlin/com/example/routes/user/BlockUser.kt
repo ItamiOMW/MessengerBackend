@@ -1,6 +1,5 @@
 package com.example.routes.user
 
-
 import com.example.data.response.ApiResponse
 import com.example.service.UserService
 import com.example.util.userId
@@ -12,20 +11,19 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.Route
 
 
-fun Route.getUserProfile(userService: UserService) {
+fun Route.blockUser(userService: UserService) {
     authenticate {
-        get<UserRoutes.GetUserProfileRoute> { getUserProfileRoute ->
+        post<UserRoutes.BlockUserRoute> { blockUserRoute ->
             val userId = call.userId()
-            val userIdToGetProfile = getUserProfileRoute.id
+            val userIdToBlock = blockUserRoute.id
 
-            val profile = userService.getProfile(userId, userIdToGetProfile)
+            userService.blockUser(userId, userIdToBlock)
 
             call.respond(
                 status = HttpStatusCode.OK,
-                ApiResponse(
+                ApiResponse<Unit>(
                     successful = true,
-                    message = "Successfully got the user profile.",
-                    data = profile
+                    message = "Successfully blocked the user.",
                 )
             )
         }

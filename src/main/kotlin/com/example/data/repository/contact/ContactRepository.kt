@@ -6,7 +6,7 @@ import com.example.data.model.User
 
 interface ContactRepository {
 
-    suspend fun createContactRequest(contactRequest: ContactRequest): Int
+    suspend fun createContactRequest(sender: User, recipient: User): ContactRequest?
 
     suspend fun acceptContactRequest(contactRequest: ContactRequest)
 
@@ -14,11 +14,11 @@ interface ContactRepository {
 
     suspend fun getContactsByUserId(userId: Int): List<User>
 
-    suspend fun getContactRequestsByUserId(userId: Int): List<User>
+    suspend fun getContactRequestsByUserId(userId: Int): List<ContactRequest>
 
-    suspend fun getContactRequestsById(id: Int): ContactRequest?
+    suspend fun getContactRequestById(id: Int): ContactRequest?
 
-    suspend fun getMyContactRequestsByUserId(userId: Int): List<User>
+    suspend fun getMyContactRequestsByUserId(userId: Int): List<ContactRequest>
 
     suspend fun areContacts(userId: Int, contactId: Int): Boolean
 

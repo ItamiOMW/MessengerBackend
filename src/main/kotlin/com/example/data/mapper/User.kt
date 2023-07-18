@@ -1,10 +1,11 @@
 package com.example.data.mapper
 
+import com.example.data.database.entity.UserEntity
 import com.example.data.database.table.Users
+import com.example.data.model.SimpleUser
 import com.example.data.model.UpdateUser
 import com.example.data.model.User
 import com.example.data.response.MyUserResponse
-import com.example.data.response.SimpleUserResponse
 import org.jetbrains.exposed.sql.ResultRow
 import java.time.ZoneOffset
 
@@ -15,7 +16,7 @@ fun ResultRow?.toUser(): User? {
     }
 
     return User(
-        id = this[Users.id],
+        id = this[Users.id].value,
         email = this[Users.email],
         hashPassword = this[Users.hashPassword],
         fullName = this[Users.fullName],
@@ -27,8 +28,30 @@ fun ResultRow?.toUser(): User? {
         emailVerificationCode = this[Users.emailVerificationCode],
         passwordResetCode = this[Users.passwordResetCode],
         isPasswordResetAllowed = this[Users.isPasswordResetAllowed],
-        lastActivity = this[Users.lastActivity]
+        lastActivity = this[Users.lastActivity],
+        messagesPermission = this[Users.messagesPermission]
     )
+}
+
+fun UserEntity.toUser(): User {
+
+    return User(
+        id = this.id.value,
+        email = this.email,
+        hashPassword = this.hashPassword,
+        fullName = this.fullName,
+        username = this.username,
+        bio = this.bio,
+        profilePictureUrl = this.profilePictureUrl,
+        lastActivity = this.lastActivity,
+        isActive = this.isActive,
+        isAdmin = this.isAdmin,
+        isPasswordResetAllowed = this.isPasswordResetAllowed,
+        emailVerificationCode = this.emailVerificationCode,
+        passwordResetCode = this.passwordResetCode,
+        messagesPermission = this.messagesPermission
+    )
+
 }
 
 
@@ -56,10 +79,10 @@ fun User.toMyUserResponse(): MyUserResponse = MyUserResponse(
     isPasswordResetAllowed = this.isPasswordResetAllowed,
 )
 
-fun User.toSimpleUserResponse(): SimpleUserResponse = SimpleUserResponse(
+fun User.toSimpleUserResponse(): SimpleUser = SimpleUser(
     id = this.id,
     fullName = this.fullName,
     username = this.username,
     profilePictureUrl = this.profilePictureUrl,
-    lastActivity = this.lastActivity.toEpochSecond(ZoneOffset.UTC)
+    lastActivity = this.lastActivity.toEpochSecond(ZoneOffset.UTC),
 )

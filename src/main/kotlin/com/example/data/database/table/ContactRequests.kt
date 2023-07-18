@@ -1,12 +1,14 @@
 package com.example.data.database.table
 
 import com.example.data.model.ContactRequestStatus
-import org.jetbrains.exposed.sql.Table
+import com.example.util.getCurrentDateTime
+import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.ReferenceOption
+import org.jetbrains.exposed.sql.javatime.datetime
 
-object ContactRequests : Table() {
-    val id = integer("id").autoIncrement()
-    val senderId = integer("sender").references(Users.id)
-    val recipientId = integer("recipient").references(Users.id).uniqueIndex()
+object ContactRequests : IntIdTable("contact_request") {
+    val senderId = reference("sender_id", Users.id, onDelete = ReferenceOption.CASCADE)
+    val recipientId = reference("recipient_id", Users.id, onDelete = ReferenceOption.CASCADE)
     val status = enumerationByName("status", 20, ContactRequestStatus::class).default(ContactRequestStatus.PENDING)
-    override val primaryKey = PrimaryKey(id)
+    val createdAt = datetime("created_at").default(getCurrentDateTime())
 }

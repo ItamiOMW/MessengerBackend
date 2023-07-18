@@ -12,20 +12,19 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.Route
 
 
-fun Route.getUserProfile(userService: UserService) {
+fun Route.unblockUser(userService: UserService) {
     authenticate {
-        get<UserRoutes.GetUserProfileRoute> { getUserProfileRoute ->
+        post<UserRoutes.UnblockUserRoute> { blockUserRoute ->
             val userId = call.userId()
-            val userIdToGetProfile = getUserProfileRoute.id
+            val userIdToUnblock = blockUserRoute.id
 
-            val profile = userService.getProfile(userId, userIdToGetProfile)
+            userService.unblockUser(userId, userIdToUnblock)
 
             call.respond(
                 status = HttpStatusCode.OK,
-                ApiResponse(
+                ApiResponse<Unit>(
                     successful = true,
-                    message = "Successfully got the user profile.",
-                    data = profile
+                    message = "Successfully unblocked the user.",
                 )
             )
         }
