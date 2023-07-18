@@ -11,21 +11,20 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.Route
 
 
-fun Route.sendContactRequest(contactService: ContactService) {
+fun Route.getContactRequests(contactService: ContactService) {
     authenticate {
-        post<ContactRoutes.SendContactRequestRoute> { params ->
+        get<ContactRoutes.GetContactRequestsRoute> { params ->
             val userId = call.userId()
-            val recipientId = params.id
 
-            val contactRequestResponse = contactService.createContactRequest(userId, recipientId)
+            val contactRequests = contactService.getContactRequests(userId)
 
             call.respond(
                 HttpStatusCode.Created,
                 ApiResponse(
                     successful = true,
-                    message = "Successfully send contact request.",
+                    message = "Successfully got contact request.",
                     exceptionCode = null,
-                    data = contactRequestResponse
+                    data = contactRequests
                 )
             )
         }

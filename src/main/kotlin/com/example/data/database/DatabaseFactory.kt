@@ -1,5 +1,6 @@
 package com.example.data.database
 
+import com.example.data.database.table.BlockedUsers
 import com.example.data.database.table.ContactRequests
 import com.example.data.database.table.Contacts
 import com.example.util.Constants
@@ -21,6 +22,7 @@ object DatabaseFactory {
             SchemaUtils.create(Users)
             SchemaUtils.create(ContactRequests)
             SchemaUtils.create(Contacts)
+            SchemaUtils.create(BlockedUsers)
         }
     }
 

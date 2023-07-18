@@ -10,6 +10,7 @@ import com.example.email.EmailManager
 import com.example.email.SimpleEmailManager
 import com.example.service.AuthService
 import com.example.service.ContactService
+import com.example.service.UserService
 import org.koin.dsl.module
 
 val mainModule = module {
@@ -20,6 +21,7 @@ val mainModule = module {
     // Services
     single { AuthService(get(), get(), get()) }
     single { ContactService(get(), get()) }
+    single { UserService(get(), get()) }
 
     // Other
     single<TokenManager> { JwtTokenManager() }

@@ -17,11 +17,5 @@ data class MyUserResponse(
 //    val contactRequests: List<SimpleUser>,
 //    val myContactRequests: List<SimpleUser>,
 //    val blockedUsers: List<SimpleUser>,
-//    val enableNotification: Boolean,
-//    val whoCanSendMessages: Int
-) {
-    companion object {
-        const val ANYONE_CAN_SEND_MESSAGE = 0
-        const val CONTACTS_ONLY_CAN_SEND_MESSAGE = 1
-    }
-}
+//    val messagesPermission: MessagesPermission
+)

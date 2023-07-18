@@ -1,6 +1,8 @@
 package com.example.data.repository.contact
 
 import com.example.data.database.DatabaseFactory.dbQuery
+import com.example.data.database.entity.ContactRequestEntity
+import com.example.data.database.entity.UserEntity
 import com.example.data.database.table.ContactRequests
 import com.example.data.database.table.Contacts
 import com.example.data.database.table.Users
@@ -15,33 +17,37 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 class ContactRepositoryImpl : ContactRepository {
 
-
-    override suspend fun createContactRequest(contactRequest: ContactRequest): Int {
+    override suspend fun createContactRequest(sender: User, recipient: User): ContactRequest? {
         return dbQuery {
-            val insertStatement = ContactRequests.insert { table ->
-                table[senderId] = contactRequest.senderId
-                table[recipientId] = contactRequest.recipientId
-            }
-            return@dbQuery insertStatement[ContactRequests.id]
+            val contactRequest = ContactRequestEntity.new {
+                this.sender = UserEntity[sender.id]
+                this.recipient = UserEntity[recipient.id]
+            }.toContactRequest()
+
+            return@dbQuery contactRequest
         }
     }
 
     override suspend fun acceptContactRequest(contactRequest: ContactRequest) {
         dbQuery {
-            ContactRequests.update({ ContactRequests.id eq contactRequest.id }) { table ->
-                table[status] = ContactRequestStatus.ACCEPTED
+            val contactRequestEntity = ContactRequestEntity.findById(contactRequest.id)
+
+            contactRequestEntity?.let {
+                it.status = ContactRequestStatus.ACCEPTED
             }
             Contacts.insert { table ->
-                table[firstUserId] = contactRequest.senderId
-                table[secondUserId] = contactRequest.recipientId
+                table[firstUserId] = contactRequest.sender.id
+                table[secondUserId] = contactRequest.recipient.id
             }
         }
     }
 
     override suspend fun declineContactRequest(contactRequest: ContactRequest) {
         dbQuery {
-            ContactRequests.update({ ContactRequests.id eq contactRequest.id }) { table ->
-                table[status] = ContactRequestStatus.DECLINED
+            val contactRequestEntity = ContactRequestEntity.findById(contactRequest.id)
+
+            contactRequestEntity?.let {
+                it.status = ContactRequestStatus.DECLINED
             }
         }
     }
@@ -55,27 +61,25 @@ class ContactRepositoryImpl : ContactRepository {
         }
     }
 
-    override suspend fun getContactRequestsByUserId(userId: Int): List<User> {
+    override suspend fun getContactRequestsByUserId(userId: Int): List<ContactRequest> {
         return dbQuery {
-            return@dbQuery (ContactRequests innerJoin Users)
-                .slice(Users.columns)
-                .select { (ContactRequests.recipientId eq userId) }
-                .mapNotNull<ResultRow, User> { it.toUser() }
+            ContactRequestEntity.find {
+                ContactRequests.recipientId eq userId
+            }.mapNotNull { it.toContactRequest() }
         }
     }
 
-    override suspend fun getContactRequestsById(id: Int): ContactRequest? {
+    override suspend fun getContactRequestById(id: Int): ContactRequest? {
         return dbQuery {
-            ContactRequests.select { ContactRequests.id eq id }.firstOrNull().toContactRequest()
+            ContactRequestEntity.findById(id).toContactRequest()
         }
     }
 
-    override suspend fun getMyContactRequestsByUserId(userId: Int): List<User> {
+    override suspend fun getMyContactRequestsByUserId(userId: Int): List<ContactRequest> {
         return dbQuery {
-            return@dbQuery (ContactRequests innerJoin Users)
-                .slice(Users.columns)
-                .select { (ContactRequests.senderId eq userId) }
-                .mapNotNull<ResultRow, User> { it.toUser() }
+            ContactRequestEntity.find {
+                ContactRequests.senderId eq userId
+            }.mapNotNull { it.toContactRequest() }
         }
     }
 
@@ -100,15 +104,17 @@ class ContactRepositoryImpl : ContactRepository {
 
     override suspend fun cancelContactRequest(contactRequest: ContactRequest) {
         dbQuery {
-            ContactRequests.update({ ContactRequests.id eq contactRequest.id }) { table ->
-                table[status] = ContactRequestStatus.CANCELED
+            val contactRequestEntity = ContactRequestEntity.findById(contactRequest.id)
+
+            contactRequestEntity?.let {
+                it.status = ContactRequestStatus.CANCELED
             }
         }
     }
 
     override suspend fun hasActiveFriendRequest(firstUserId: Int, secondUserId: Int): Boolean {
         return dbQuery {
-            val activeRequests = ContactRequests.select {
+            val activeRequests = ContactRequestEntity.find {
                 ((ContactRequests.senderId eq firstUserId) and (ContactRequests.recipientId eq secondUserId)) or
                         (((ContactRequests.senderId eq secondUserId) and (ContactRequests.recipientId eq firstUserId))) and
                         (ContactRequests.status eq ContactRequestStatus.PENDING)

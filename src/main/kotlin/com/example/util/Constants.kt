@@ -19,6 +19,12 @@ object Constants {
     const val MAX_CODE_VALUE = 99999
     const val MIN_CODE_VALUE = 10000
 
+    const val MIN_USERNAME_LENGTH = 3
+    const val MAX_USERNAME_LENGTH = 20
+
+    const val MAX_FULL_NAME_LENGTH = 60
+    const val MAX_BIO_LENGTH = 100
+
     const val DEFAULT_TIMEZONE = "UTC"
 
 }

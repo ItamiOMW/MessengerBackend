@@ -26,5 +26,8 @@ object ContactRoutes {
     @Resource(CONTACTS_CANCEL_REQUEST)
     class CancelContactRequestRoute(val id: Int)
 
+    @Resource(REQUESTS)
+    class GetContactRequestsRoute()
+
 
 }
