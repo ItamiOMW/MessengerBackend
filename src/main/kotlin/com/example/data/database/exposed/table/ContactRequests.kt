@@ -1,4 +1,4 @@
-package com.example.data.database.table
+package com.example.data.database.exposed.table
 
 import com.example.data.model.ContactRequestStatus
 import com.example.util.getCurrentDateTime

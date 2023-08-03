@@ -1,10 +1,10 @@
-package com.example.data.database
+package com.example.data.database.exposed
 
-import com.example.data.database.table.BlockedUsers
-import com.example.data.database.table.ContactRequests
-import com.example.data.database.table.Contacts
+import com.example.data.database.exposed.table.BlockedUsers
+import com.example.data.database.exposed.table.ContactRequests
+import com.example.data.database.exposed.table.Contacts
 import com.example.util.Constants
-import com.example.data.database.table.Users
+import com.example.data.database.exposed.table.Users
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers

@@ -17,10 +17,4 @@ interface UserRepository {
 
     suspend fun searchUsersByUsername(username: String): List<User>
 
-    suspend fun blockUser(userId: Int, userIdToBlock: Int)
-
-    suspend fun unblockUser(userId: Int, userIdToUnblock: Int)
-
-    suspend fun isBlocked(userId: Int, blockedByUserId: Int): Boolean
-
 }

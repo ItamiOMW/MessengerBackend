@@ -1,14 +1,12 @@
 package com.example.data.repository.user
 
-import com.example.data.database.DatabaseFactory.dbQuery
-import com.example.data.database.entity.UserEntity
-import com.example.data.database.table.BlockedUsers
-import com.example.data.database.table.Users
+import com.example.data.database.exposed.DatabaseFactory.dbQuery
+import com.example.data.database.exposed.entity.UserEntity
+import com.example.data.database.exposed.table.Users
 import com.example.data.mapper.toUser
 import com.example.data.model.UpdateUser
 import com.example.data.model.User
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 class UserRepositoryImpl : UserRepository {
 
@@ -84,33 +82,5 @@ class UserRepositoryImpl : UserRepository {
             }.map { it.toUser() }
         }
     }
-
-    override suspend fun blockUser(userId: Int, userIdToBlock: Int) {
-        dbQuery {
-            BlockedUsers.insert { table ->
-                table[this.userId] = userId
-                table[this.blockedUserId] = userIdToBlock
-            }
-        }
-    }
-
-    override suspend fun unblockUser(userId: Int, userIdToUnblock: Int) {
-        dbQuery {
-            BlockedUsers.deleteWhere {
-                (BlockedUsers.userId eq userId) and (blockedUserId eq userIdToUnblock)
-            }
-        }
-
-    }
-
-    override suspend fun isBlocked(userId: Int, blockedByUserId: Int): Boolean {
-        return dbQuery {
-            BlockedUsers.select {
-                (BlockedUsers.userId eq userId) and (BlockedUsers.blockedUserId eq blockedByUserId)
-            }.count() > 0
-        }
-
-    }
-
 
 }

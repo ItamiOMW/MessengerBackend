@@ -51,8 +51,8 @@ class AuthService(
     }
 
 
-    suspend fun loginUser(loginRequest: LoginRequest): String {
-        val user = getUserByEmail(loginRequest.email) ?: throw InvalidLoginCredentialsException()
+    suspend fun loginUser(loginRequest: LoginRequest): Pair<User, String> {
+        val user = getUserByEmail(loginRequest.email) ?: throw UnauthorizedException()
 
         if (!user.isActive) {
             throw UserIsNotActiveException()
@@ -61,11 +61,14 @@ class AuthService(
         val doesPasswordsMatch = checkPassword(loginRequest.password, user.hashPassword)
 
         if (!doesPasswordsMatch) {
-            throw InvalidLoginCredentialsException()
+            throw UnauthorizedException()
         }
 
-        return tokenManager.generateToken(user)
+        val token = tokenManager.generateToken(user)
+
+        return user to token
     }
+
 
     suspend fun sendEmailVerificationCode(sendVerificationCodeRequest: SendVerificationCodeRequest) {
         val email = sendVerificationCodeRequest.email
@@ -87,7 +90,7 @@ class AuthService(
     }
 
 
-    suspend fun verifyEmail(verifyEmailRequest: VerifyEmailRequest) {
+    suspend fun verifyEmail(verifyEmailRequest: VerifyEmailRequest): Pair<User, String> {
         val user = getUserByEmail(verifyEmailRequest.email) ?: throw UserDoesNotExistException()
 
         val enteredCode = verifyEmailRequest.code
@@ -102,6 +105,14 @@ class AuthService(
             updateUser = user.toUpdateUser().copy(isActive = true, emailVerificationCode = null),
             id = user.id
         )
+
+        if (!user.isActive) {
+            throw UserIsNotActiveException()
+        }
+
+        val token = tokenManager.generateToken(user)
+
+        return user to token
     }
 
 
@@ -161,7 +172,7 @@ class AuthService(
         return userRepository.getUserByEmail(email)
     }
 
-    suspend fun getUserById(id: Int): User? {
+    private suspend fun getUserById(id: Int): User? {
         return userRepository.getUserById(id)
     }
 

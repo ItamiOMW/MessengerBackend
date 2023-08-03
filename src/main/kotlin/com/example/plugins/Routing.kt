@@ -8,8 +8,10 @@ import com.example.routes.user.getUserProfile
 import com.example.routes.user.unblockUser
 import com.example.routes.user.updateProfile
 import com.example.service.AuthService
+import com.example.service.BlockService
 import com.example.service.ContactService
 import com.example.service.UserService
+import com.google.cloud.storage.Bucket
 import io.ktor.server.application.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
@@ -24,30 +26,37 @@ fun Application.configureRouting() {
     val authService: AuthService by inject()
     val contactService: ContactService by inject()
     val userService: UserService by inject()
+    val blockService: BlockService by inject()
+
+    val bucket: Bucket by inject()
 
     routing {
         get("/") {
             call.respondText("Welcome to Itami Chat!")
         }
+
+        //Auth
         register(authService)
-        login(authService)
-        authenticate(authService)
+        login(authService, userService)
+        authenticate(userService)
         sendVerification(authService)
         sendPasswordResetCode(authService)
-        verifyEmail(authService)
+        verifyEmail(authService, userService)
         verifyPasswordResetCode(authService)
         resetPassword(authService)
 
+        //Contacts
         sendContactRequest(contactService)
         acceptContactRequest(contactService)
         declineContactRequest(contactService)
         cancelContactRequest(contactService)
         getContactRequests(contactService)
 
-        updateProfile(userService)
+        //Users
+        updateProfile(userService, bucket)
         getUserProfile(userService)
-        blockUser(userService)
-        unblockUser(userService)
+        blockUser(blockService)
+        unblockUser(blockService)
     }
 
 }

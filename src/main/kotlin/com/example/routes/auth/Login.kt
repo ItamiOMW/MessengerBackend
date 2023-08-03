@@ -4,6 +4,7 @@ import com.example.data.request.LoginRequest
 import com.example.data.response.ApiResponse
 import com.example.data.response.AuthResponse
 import com.example.service.AuthService
+import com.example.service.UserService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -13,19 +14,23 @@ import io.ktor.server.routing.Route
 
 
 fun Route.login(
-    authService: AuthService
+    authService: AuthService,
+    userService: UserService
 ) {
     post<AuthRoutes.UserLoginRoute> {
         val loginRequest = call.receive<LoginRequest>()
 
-        val token = authService.loginUser(loginRequest)
+        val userToToken = authService.loginUser(loginRequest)
+
+        val user = userService.getMyUser(userToToken.first.id)
+        val token = userToToken.second
 
         call.respond(
             HttpStatusCode.OK,
             ApiResponse(
                 successful = true,
                 message = "Successfully logged in.",
-                data = AuthResponse(token)
+                data = AuthResponse(token, user)
             )
         )
     }

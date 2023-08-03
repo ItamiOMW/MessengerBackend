@@ -1,5 +1,6 @@
 package com.example.data.response
 
+import com.example.data.model.MessagesPermission
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -10,12 +11,7 @@ data class MyUserResponse(
     val username: String?,
     val bio: String?,
     val profilePictureUrl: String?,
-    val isActive: Boolean,
-    val isAdmin: Boolean,
-    val isPasswordResetAllowed: Boolean,
-//    val contacts: List<SimpleUser>,
-//    val contactRequests: List<SimpleUser>,
-//    val myContactRequests: List<SimpleUser>,
-//    val blockedUsers: List<SimpleUser>,
-//    val messagesPermission: MessagesPermission
+    val contactRequestsCount: Int,
+    val blockedUsersCount: Int,
+    val messagesPermission: MessagesPermission
 )

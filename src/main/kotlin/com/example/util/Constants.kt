@@ -14,6 +14,8 @@ object Constants {
     const val EMAIL_HOST_PASSWORD_KEY = "EMAIL_HOST_PASSWORD"
     const val EMAIL_HOST_KEY = "EMAIL_HOST"
 
+    const val STORAGE_BUCKET = "itami-chat-images.appspot.com"
+
     const val UNKNOWN_ID = -1
 
     const val MAX_CODE_VALUE = 99999
@@ -22,7 +24,7 @@ object Constants {
     const val MIN_USERNAME_LENGTH = 3
     const val MAX_USERNAME_LENGTH = 20
 
-    const val MAX_FULL_NAME_LENGTH = 60
+    const val MAX_FULL_NAME_LENGTH = 50
     const val MAX_BIO_LENGTH = 100
 
     const val DEFAULT_TIMEZONE = "UTC"
