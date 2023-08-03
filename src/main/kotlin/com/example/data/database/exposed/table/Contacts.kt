@@ -1,4 +1,4 @@
-package com.example.data.database.table
+package com.example.data.database.exposed.table
 
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table

@@ -1,6 +1,6 @@
 package com.example.data.mapper
 
-import com.example.data.database.entity.ContactRequestEntity
+import com.example.data.database.exposed.entity.ContactRequestEntity
 import com.example.data.model.ContactRequest
 import com.example.data.response.ContactRequestResponse
 

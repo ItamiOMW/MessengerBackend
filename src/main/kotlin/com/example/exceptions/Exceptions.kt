@@ -3,6 +3,11 @@ package com.example.exceptions
 import io.ktor.http.*
 
 
+data class UnauthorizedException(override val message: String = "Invalid email or password.") : AppException(
+    message = "Invalid email or password.",
+    exceptionCode = ExceptionCode.Unauthorized.code,
+    httpStatusCode = HttpStatusCode.Unauthorized
+)
 
 data class ForbiddenException(override val message: String = "Forbidden.") : AppException(
     message = message,

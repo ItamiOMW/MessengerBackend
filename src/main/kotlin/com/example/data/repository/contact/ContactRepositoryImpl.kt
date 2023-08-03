@@ -1,11 +1,11 @@
 package com.example.data.repository.contact
 
-import com.example.data.database.DatabaseFactory.dbQuery
-import com.example.data.database.entity.ContactRequestEntity
-import com.example.data.database.entity.UserEntity
-import com.example.data.database.table.ContactRequests
-import com.example.data.database.table.Contacts
-import com.example.data.database.table.Users
+import com.example.data.database.exposed.DatabaseFactory.dbQuery
+import com.example.data.database.exposed.entity.ContactRequestEntity
+import com.example.data.database.exposed.entity.UserEntity
+import com.example.data.database.exposed.table.ContactRequests
+import com.example.data.database.exposed.table.Contacts
+import com.example.data.database.exposed.table.Users
 import com.example.data.mapper.toContactRequest
 import com.example.data.mapper.toUser
 import com.example.data.model.Contact

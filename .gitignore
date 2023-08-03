@@ -34,3 +34,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Firebase private key ###
+/src/main/resources/itami-chat-images-firebase-adminsdk-x1l8u-e6f032d302.json

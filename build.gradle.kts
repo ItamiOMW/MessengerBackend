@@ -7,6 +7,8 @@ val hikari_version: String by project
 val exposed_version: String by project
 val jbcrypt_version: String by project
 val apache_email_version: String by project
+val firebase_admin_version: String by project
+val slfj4_version: String by project
 
 plugins {
     kotlin("jvm") version "1.8.22"
@@ -30,7 +32,7 @@ repositories {
 dependencies {
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-websockets-jvm:$ktor_version")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
+    implementation("io.ktor:ktor-serialization-gson:$ktor_version")
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-host-common-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-status-pages-jvm:$ktor_version")
@@ -62,4 +64,8 @@ dependencies {
 
     // Apache Email
     implementation("org.apache.commons:commons-email:$apache_email_version")
+
+    //Firebase
+    implementation("org.slf4j:slf4j-simple:$slfj4_version")
+    implementation("com.google.firebase:firebase-admin:$firebase_admin_version")
 }

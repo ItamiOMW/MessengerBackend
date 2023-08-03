@@ -20,6 +20,7 @@ fun RequestValidationConfig.profileRequestsValidation() {
             username?.let {
                 if (it.isBlank()) throw BadRequestException("Username is blank.")
                 if (it.length > Constants.MAX_USERNAME_LENGTH) throw BadRequestException("Username is too long.")
+                if (it.length < Constants.MIN_USERNAME_LENGTH) throw BadRequestException("Username is too short.")
             }
         }
 

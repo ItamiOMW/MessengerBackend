@@ -1,6 +1,6 @@
-package com.example.data.database.entity
+package com.example.data.database.exposed.entity
 
-import com.example.data.database.table.Users
+import com.example.data.database.exposed.table.Users
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

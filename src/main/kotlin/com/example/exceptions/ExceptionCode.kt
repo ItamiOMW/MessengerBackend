@@ -17,7 +17,7 @@ data class ExceptionCode(
         val InvalidPassword = ExceptionCode("400.6", "Invalid password.")
 
         // 401s
-        val InvalidLoginCredentials = ExceptionCode("401.1", "Invalid email or password.")
+        val Unauthorized = ExceptionCode("401", "Invalid email or password.")
 
         // 403s
         val Forbidden = ExceptionCode("403", "Forbidden.")

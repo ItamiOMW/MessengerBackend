@@ -16,12 +16,6 @@ data class UserDoesNotExistException(override val message: String = "A user with
     httpStatusCode = HttpStatusCode.NotFound
 )
 
-data class InvalidLoginCredentialsException(override val message: String = "Invalid email or password.") : AppException(
-    message = "Invalid email or password.",
-    exceptionCode = ExceptionCode.InvalidLoginCredentials.code,
-    httpStatusCode = HttpStatusCode.Unauthorized
-)
-
 data class InvalidEmailException(override val message: String = "Invalid email.") : AppException(
     message = message,
     exceptionCode = ExceptionCode.InvalidEmail.code,
