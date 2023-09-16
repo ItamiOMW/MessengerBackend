@@ -15,10 +15,12 @@ class UserEntity(id: EntityID<Int>) : IntEntity(id) {
     var bio by Users.bio
     var profilePictureUrl by Users.profilePictureUrl
     var emailVerificationCode by Users.emailVerificationCode
+    var passwordChangeCode by Users.passwordChangeCode
     var passwordResetCode by Users.passwordResetCode
     var isActive by Users.isActive
     var isAdmin by Users.isAdmin
-    var isPasswordResetAllowed by Users.isPasswordResetAllowed
+    var isPasswordChangeAllowed by Users.isPasswordChangeAllowed
     var lastActivity by Users.lastActivity
+    var isOnline by Users.isOnline
     var messagesPermission by Users.messagesPermission
 }

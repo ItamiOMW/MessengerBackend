@@ -6,6 +6,7 @@ object FirebaseStorageUrl {
 
     const val basePath = ""
     const val profilePicturePath = "profile-pictures"
+    const val chatPicturePath = "chat-pictures"
 
     infix fun String.reference(path: String) = "$this$path%2F"
 

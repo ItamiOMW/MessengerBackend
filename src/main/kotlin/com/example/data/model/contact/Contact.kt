@@ -1,4 +1,4 @@
-package com.example.data.model
+package com.example.data.model.contact
 
 data class Contact(
     val firstUserId: Int,

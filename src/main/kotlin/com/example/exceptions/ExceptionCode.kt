@@ -32,6 +32,8 @@ data class ExceptionCode(
         val Conflict = ExceptionCode("409", "Conflict.")
         val UserAlreadyExists = ExceptionCode("409.1", "User with this email already exists.")
 
+        val InternalServerError = ExceptionCode("500", "Internal server error occurred.")
+
     }
 
 }

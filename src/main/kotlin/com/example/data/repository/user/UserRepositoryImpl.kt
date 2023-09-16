@@ -4,8 +4,9 @@ import com.example.data.database.exposed.DatabaseFactory.dbQuery
 import com.example.data.database.exposed.entity.UserEntity
 import com.example.data.database.exposed.table.Users
 import com.example.data.mapper.toUser
-import com.example.data.model.UpdateUser
-import com.example.data.model.User
+import com.example.data.model.users.UpdateUser
+import com.example.data.model.users.User
+import com.example.util.getCurrentDateTime
 import org.jetbrains.exposed.sql.*
 
 class UserRepositoryImpl : UserRepository {
@@ -21,7 +22,7 @@ class UserRepositoryImpl : UserRepository {
                 this.profilePictureUrl = user.profilePictureUrl
                 this.emailVerificationCode = user.emailVerificationCode
                 this.passwordResetCode = user.passwordResetCode
-                this.isPasswordResetAllowed = user.isPasswordResetAllowed
+                this.isPasswordChangeAllowed = user.isPasswordChangeAllowed
                 this.isActive = user.isActive
                 this.isAdmin = user.isAdmin
             }
@@ -41,12 +42,24 @@ class UserRepositoryImpl : UserRepository {
                 it.bio = updateUser.bio
                 it.profilePictureUrl = updateUser.profilePictureUrl
                 it.emailVerificationCode = updateUser.emailVerificationCode
+                it.passwordChangeCode = updateUser.passwordChangeCode
                 it.passwordResetCode = updateUser.passwordResetCode
-                it.isPasswordResetAllowed = updateUser.isPasswordResetAllowed
+                it.isPasswordChangeAllowed = updateUser.isPasswordChangeAllowed
                 it.isActive = updateUser.isActive
+                it
             }
 
             userEntity?.toUser()
+        }
+    }
+
+    override suspend fun setUserOnlineStatus(id: Int, isOnline: Boolean) {
+        dbQuery {
+            val userEntity = UserEntity.find { Users.id eq id }.firstOrNull()
+            userEntity?.let {
+                it.isOnline = isOnline
+                it.lastActivity = getCurrentDateTime()
+            }
         }
     }
 
@@ -61,6 +74,12 @@ class UserRepositoryImpl : UserRepository {
     override suspend fun getUserById(id: Int): User? {
         return dbQuery {
             UserEntity.findById(id)?.toUser()
+        }
+    }
+
+    override suspend fun getUsersByIds(idList: List<Int>): List<User> {
+        return dbQuery {
+            UserEntity.find { Users.id inList idList }.map { it.toUser() }
         }
     }
 

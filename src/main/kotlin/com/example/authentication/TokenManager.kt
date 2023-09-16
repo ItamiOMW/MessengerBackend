@@ -1,7 +1,6 @@
 package com.example.authentication
 
-import com.auth0.jwt.JWTVerifier
-import com.example.data.model.User
+import com.example.data.model.users.User
 
 interface TokenManager {
 

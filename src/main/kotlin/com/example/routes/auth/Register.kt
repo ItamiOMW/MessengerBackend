@@ -1,7 +1,7 @@
 package com.example.routes.auth
 
 import com.example.data.request.RegisterRequest
-import com.example.data.response.ApiResponse
+import com.example.data.response.SuccessfulResponse
 import com.example.service.AuthService
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -22,7 +22,7 @@ fun Route.register(
 
         call.respond(
             HttpStatusCode.Created,
-            ApiResponse<Unit>(true, "User created successfully, confirm email.")
+            SuccessfulResponse<Unit>(message = "User created successfully, confirm email.")
         )
     }
 }

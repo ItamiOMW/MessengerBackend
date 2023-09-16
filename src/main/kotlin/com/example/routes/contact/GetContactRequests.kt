@@ -1,6 +1,6 @@
 package com.example.routes.contact
 
-import com.example.data.response.ApiResponse
+import com.example.data.response.SuccessfulResponse
 import com.example.service.ContactService
 import com.example.util.userId
 import io.ktor.http.*
@@ -20,10 +20,8 @@ fun Route.getContactRequests(contactService: ContactService) {
 
             call.respond(
                 HttpStatusCode.Created,
-                ApiResponse(
-                    successful = true,
-                    message = "Successfully got contact request.",
-                    exceptionCode = null,
+                SuccessfulResponse(
+                    message = "Successfully received contact requests.",
                     data = contactRequests
                 )
             )

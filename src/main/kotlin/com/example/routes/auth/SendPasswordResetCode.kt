@@ -1,29 +1,26 @@
 package com.example.routes.auth
 
-import com.example.data.response.ApiResponse
+import com.example.data.request.SendPasswordResetCodeRequest
+import com.example.data.response.SuccessfulResponse
 import com.example.service.AuthService
-import com.example.util.userEmail
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
+import io.ktor.server.request.*
 import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.Route
 
-
 fun Route.sendPasswordResetCode(
     authService: AuthService
 ) {
-    authenticate {
-        post<AuthRoutes.SendPasswordResetCodeRoute> {
-            val userEmail = call.userEmail()
+    post<AuthRoutes.SendPasswordResetCodeRoute> {
+        val sendPasswordResetCodeRequest = call.receive<SendPasswordResetCodeRequest>()
 
-            authService.sendPasswordResetCode(userEmail)
+        authService.sendPasswordResetCode(sendPasswordResetCodeRequest.email)
 
-            call.respond(
-                HttpStatusCode.OK,
-                ApiResponse<Unit>(true, "Password reset code sent successfully.")
-            )
-        }
+        call.respond(
+            HttpStatusCode.OK,
+            SuccessfulResponse<Unit>(message = "Password reset code sent successfully.")
+        )
     }
 }

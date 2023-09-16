@@ -10,9 +10,13 @@ object ContactRoutes {
     private const val REQUESTS = "$CONTACTS/requests"
 
     private const val CONTACTS_SEND_REQUEST = "${REQUESTS}/send/{id}"
-    private const val CONTACTS_ACCEPT_REQUEST = "${REQUESTS}/accept/{id}"
-    private const val CONTACTS_DECLINE_REQUEST = "${REQUESTS}/decline/{id}"
-    private const val CONTACTS_CANCEL_REQUEST = "${REQUESTS}/cancel/{id}"
+    private const val CONTACTS_ACCEPT_REQUEST = "${REQUESTS}/{id}/accept"
+    private const val CONTACTS_DECLINE_REQUEST = "${REQUESTS}/{id}/decline"
+    private const val CONTACTS_CANCEL_REQUEST = "${REQUESTS}/{id}/cancel"
+
+
+    @Resource(CONTACTS)
+    class GetContacts
 
     @Resource(CONTACTS_SEND_REQUEST)
     class SendContactRequestRoute(val id: Int)

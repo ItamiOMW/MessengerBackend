@@ -14,5 +14,6 @@ data class ProfileResponse(
     val canSendMessage: Boolean,
     val isBlockedByMe: Boolean,
     val isBlockedByUser: Boolean,
+    val isOnline: Boolean,
     val lastActivity: Long,
 )

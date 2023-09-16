@@ -1,7 +1,7 @@
 package com.example.routes.contact
 
 
-import com.example.data.response.ApiResponse
+import com.example.data.response.SuccessfulResponse
 import com.example.service.ContactService
 import com.example.util.userId
 import io.ktor.http.*
@@ -22,10 +22,8 @@ fun Route.declineContactRequest(contactService: ContactService) {
 
             call.respond(
                 HttpStatusCode.Created,
-                ApiResponse<Unit>(
-                    successful = true,
+                SuccessfulResponse<Unit>(
                     message = "Successfully declined contact request.",
-                    exceptionCode = null,
                 )
             )
         }

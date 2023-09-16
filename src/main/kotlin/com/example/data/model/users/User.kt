@@ -1,4 +1,4 @@
-package com.example.data.model
+package com.example.data.model.users
 
 import com.example.util.Constants
 import java.time.LocalDateTime
@@ -13,12 +13,14 @@ data class User(
     val bio: String? = null,
     val profilePictureUrl: String? = null,
     val lastActivity: LocalDateTime,
+    val isOnline: Boolean,
 
     val isActive: Boolean = false,
     val isAdmin: Boolean = false,
-    val isPasswordResetAllowed: Boolean = false,
+    val isPasswordChangeAllowed: Boolean = false,
 
     val emailVerificationCode: Int? = null,
+    val passwordChangeCode: Int? = null,
     val passwordResetCode: Int? = null,
 
     val messagesPermission: MessagesPermission,

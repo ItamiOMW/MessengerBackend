@@ -1,8 +1,8 @@
 package com.example.data.repository.contact
 
-import com.example.data.model.Contact
-import com.example.data.model.ContactRequest
-import com.example.data.model.User
+import com.example.data.model.contact.Contact
+import com.example.data.model.contact.ContactRequest
+import com.example.data.model.users.User
 
 interface ContactRepository {
 
