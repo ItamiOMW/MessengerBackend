@@ -5,7 +5,7 @@ import com.example.data.database.exposed.entity.UserEntity
 import com.example.data.database.exposed.table.BlockedUsers
 import com.example.data.database.exposed.table.Users
 import com.example.data.mapper.toUser
-import com.example.data.model.User
+import com.example.data.model.users.User
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
@@ -50,8 +50,6 @@ class BlockRepositoryImpl : BlockRepository {
                 (BlockedUsers.userId eq userId) and (BlockedUsers.blockedUserId eq blockedByUserId)
             }.count() > 0
         }
-
     }
-
 
 }

@@ -1,8 +1,8 @@
 package com.example.routes.auth
 
 import com.example.data.request.VerifyEmailRequest
-import com.example.data.response.ApiResponse
 import com.example.data.response.AuthResponse
+import com.example.data.response.SuccessfulResponse
 import com.example.service.AuthService
 import com.example.service.UserService
 import io.ktor.http.*
@@ -27,10 +27,9 @@ fun Route.verifyEmail(
 
         call.respond(
             HttpStatusCode.OK,
-            ApiResponse(
-                successful = true,
+            SuccessfulResponse(
                 message = "Successfully verified email.",
-                data = AuthResponse(token, myUser)
+                data = AuthResponse(token = token, user = myUser)
             )
         )
     }

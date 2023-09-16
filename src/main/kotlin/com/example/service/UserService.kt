@@ -1,15 +1,17 @@
 package com.example.service
 
+import com.example.data.mapper.toSimpleUserResponse
 import com.example.data.mapper.toUpdateUser
-import com.example.data.model.ContactRequestStatus
-import com.example.data.model.MessagesPermission
-import com.example.data.model.User
+import com.example.data.model.contact.ContactRequestStatus
+import com.example.data.model.users.MessagesPermission
+import com.example.data.model.users.User
 import com.example.data.repository.block.BlockRepository
 import com.example.data.repository.contact.ContactRepository
 import com.example.data.repository.user.UserRepository
 import com.example.data.request.UpdateProfileRequest
 import com.example.data.response.MyUserResponse
 import com.example.data.response.ProfileResponse
+import com.example.data.response.SimpleUserResponse
 import com.example.exceptions.ConflictException
 import com.example.exceptions.NotFoundException
 import com.example.util.toLong
@@ -24,11 +26,10 @@ class UserService(
         return userRepository.getUserById(id) ?: throw NotFoundException("User not found.")
     }
 
-
     suspend fun updateProfile(
         userId: Int,
         updateProfile: UpdateProfileRequest,
-        profilePictureUrl: String?
+        profilePictureUrl: String? = null,
     ): MyUserResponse {
         val user = getUserById(userId)
 
@@ -44,14 +45,13 @@ class UserService(
             fullName = updateProfile.fullName?.trim() ?: user.fullName,
             username = updateProfile.username?.trim(),
             bio = updateProfile.bio?.trim(),
-            profilePictureUrl = profilePictureUrl
+            profilePictureUrl = profilePictureUrl ?: user.profilePictureUrl
         )
 
         userRepository.updateUser(updateUser, userId)
 
         return getMyUser(userId)
     }
-
 
     suspend fun getMyUser(userId: Int): MyUserResponse {
         val user = getUserById(userId)
@@ -74,11 +74,9 @@ class UserService(
         )
     }
 
-
     suspend fun searchForUsersByUsername(username: String): List<User> {
         return userRepository.searchUsersByUsername(username)
     }
-
 
     suspend fun getProfile(userId: Int, userIdToGetProfile: Int): ProfileResponse {
         val user = getUserById(userId)
@@ -101,8 +99,13 @@ class UserService(
             canSendMessage = canSendMessage,
             isBlockedByMe = isBlockedByMe,
             isBlockedByUser = isBlockedByUser,
+            isOnline = user.isOnline,
             lastActivity = user.lastActivity.toLong()
         )
+    }
+
+    suspend fun getUsersByIds(userId: Int, ids: List<Int>): List<SimpleUserResponse> {
+        return userRepository.getUsersByIds(ids).map { it.toSimpleUserResponse() }
     }
 
 }

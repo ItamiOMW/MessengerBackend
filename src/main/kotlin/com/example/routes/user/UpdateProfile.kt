@@ -4,7 +4,7 @@ import com.example.data.database.firebase.FirebaseStorageUrl
 import com.example.data.database.firebase.FirebaseStorageUrl.getDownloadUrl
 import com.example.data.database.firebase.FirebaseStorageUrl.reference
 import com.example.data.request.UpdateProfileRequest
-import com.example.data.response.ApiResponse
+import com.example.data.response.SuccessfulResponse
 import com.example.exceptions.BadRequestException
 import com.example.service.UserService
 import com.example.util.convert
@@ -19,12 +19,10 @@ import io.ktor.server.request.*
 import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.Route
-import org.koin.ktor.ext.inject
 
 
-fun Route.updateProfile(userService: UserService, bucket: Bucket) {
+fun Route.updateProfile(userService: UserService, bucket: Bucket, gson: Gson) {
     authenticate {
-        val gson by inject<Gson>()
 
         put<UserRoutes.UpdateProfileRoute> {
             val multipart = call.receiveMultipart()
@@ -62,8 +60,7 @@ fun Route.updateProfile(userService: UserService, bucket: Bucket) {
 
                 call.respond(
                     status = HttpStatusCode.OK,
-                    ApiResponse(
-                        successful = true,
+                    SuccessfulResponse(
                         message = "Successfully updated profile.",
                         data = myUserResponse
                     )

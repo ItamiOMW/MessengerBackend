@@ -1,10 +1,12 @@
 package com.example.service
 
 import com.example.data.mapper.toContactRequestResponse
-import com.example.data.model.ContactRequestStatus
+import com.example.data.mapper.toSimpleUserResponse
+import com.example.data.model.contact.ContactRequestStatus
 import com.example.data.repository.contact.ContactRepository
 import com.example.data.repository.user.UserRepository
 import com.example.data.response.ContactRequestResponse
+import com.example.data.response.SimpleUserResponse
 import com.example.exceptions.ConflictException
 import com.example.exceptions.ForbiddenException
 import com.example.exceptions.NotFoundException
@@ -87,7 +89,10 @@ class ContactService(
             .map { it.toContactRequestResponse() }
     }
 
-
+    suspend fun getContacts(userId: Int): List<SimpleUserResponse> {
+        val contacts = contactRepository.getContactsByUserId(userId)
+        return contacts.map { it.toSimpleUserResponse() }
+    }
 
 
 }

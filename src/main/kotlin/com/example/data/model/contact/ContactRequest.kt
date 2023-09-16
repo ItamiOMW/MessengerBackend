@@ -1,5 +1,6 @@
-package com.example.data.model
+package com.example.data.model.contact
 
+import com.example.data.model.users.User
 import com.example.util.Constants
 import com.example.util.getCurrentDateTime
 import java.time.LocalDateTime

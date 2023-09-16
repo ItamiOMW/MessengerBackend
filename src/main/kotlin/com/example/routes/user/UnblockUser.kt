@@ -1,7 +1,7 @@
 package com.example.routes.user
 
 
-import com.example.data.response.ApiResponse
+import com.example.data.response.SuccessfulResponse
 import com.example.service.BlockService
 import com.example.util.userId
 import io.ktor.http.*
@@ -24,8 +24,7 @@ fun Route.unblockUser(
 
             call.respond(
                 status = HttpStatusCode.OK,
-                ApiResponse<Unit>(
-                    successful = true,
+                SuccessfulResponse<Unit>(
                     message = "Successfully unblocked the user.",
                 )
             )

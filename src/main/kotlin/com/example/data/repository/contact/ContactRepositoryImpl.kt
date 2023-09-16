@@ -8,10 +8,10 @@ import com.example.data.database.exposed.table.Contacts
 import com.example.data.database.exposed.table.Users
 import com.example.data.mapper.toContactRequest
 import com.example.data.mapper.toUser
-import com.example.data.model.Contact
-import com.example.data.model.ContactRequest
-import com.example.data.model.ContactRequestStatus
-import com.example.data.model.User
+import com.example.data.model.contact.Contact
+import com.example.data.model.contact.ContactRequest
+import com.example.data.model.contact.ContactRequestStatus
+import com.example.data.model.users.User
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
@@ -54,10 +54,14 @@ class ContactRepositoryImpl : ContactRepository {
 
     override suspend fun getContactsByUserId(userId: Int): List<User> {
         return dbQuery {
-            return@dbQuery (Contacts innerJoin Users)
-                .slice(Users.columns)
-                .select { (Contacts.firstUserId eq userId) or (Contacts.secondUserId eq userId) }
-                .mapNotNull<ResultRow, User> { it.toUser() }
+            val ids = (Contacts.slice(Contacts.firstUserId, Contacts.secondUserId)
+                .select {
+                    (Contacts.firstUserId eq userId) or (Contacts.secondUserId eq userId)
+                }
+                .flatMap { listOfNotNull(it[Contacts.firstUserId], it[Contacts.secondUserId]) }
+                .distinct())
+                .filter { it.value != userId }
+            UserEntity.find { Users.id inList ids }.map { it.toUser() }
         }
     }
 

@@ -1,7 +1,7 @@
 package com.example.routes.auth
 
 import com.example.data.request.SendVerificationCodeRequest
-import com.example.data.response.ApiResponse
+import com.example.data.response.SuccessfulResponse
 import com.example.service.AuthService
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -22,7 +22,7 @@ fun Route.sendVerification(
 
         call.respond(
             HttpStatusCode.OK,
-            ApiResponse<Unit>(true, "Verification email sent successfully.")
+            SuccessfulResponse<Unit>(message = "Verification email sent successfully.")
         )
     }
 }

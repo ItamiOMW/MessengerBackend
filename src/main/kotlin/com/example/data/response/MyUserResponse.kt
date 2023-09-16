@@ -1,6 +1,6 @@
 package com.example.data.response
 
-import com.example.data.model.MessagesPermission
+import com.example.data.model.users.MessagesPermission
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -1,6 +1,6 @@
 package com.example.data.database.exposed.table
 
-import com.example.data.model.ContactRequestStatus
+import com.example.data.model.contact.ContactRequestStatus
 import com.example.util.getCurrentDateTime
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption

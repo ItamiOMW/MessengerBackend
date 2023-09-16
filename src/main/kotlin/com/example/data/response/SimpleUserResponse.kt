@@ -1,12 +1,13 @@
-package com.example.data.model
+package com.example.data.response
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SimpleUser(
+data class SimpleUserResponse(
     val id: Int,
     val fullName: String,
     val username: String?,
     val profilePictureUrl: String?,
+    val isOnline: Boolean,
     val lastActivity: Long,
 )

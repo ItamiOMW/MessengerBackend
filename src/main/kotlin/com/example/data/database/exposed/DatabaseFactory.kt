@@ -1,10 +1,7 @@
 package com.example.data.database.exposed
 
-import com.example.data.database.exposed.table.BlockedUsers
-import com.example.data.database.exposed.table.ContactRequests
-import com.example.data.database.exposed.table.Contacts
+import com.example.data.database.exposed.table.*
 import com.example.util.Constants
-import com.example.data.database.exposed.table.Users
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +20,11 @@ object DatabaseFactory {
             SchemaUtils.create(ContactRequests)
             SchemaUtils.create(Contacts)
             SchemaUtils.create(BlockedUsers)
+            SchemaUtils.create(Chats)
+            SchemaUtils.create(Messages)
+            SchemaUtils.create(UsersSeenMessage)
+            SchemaUtils.create(MessagePictureUrls)
+            SchemaUtils.create(Participants)
         }
     }
 
@@ -47,7 +49,18 @@ object DatabaseFactory {
         }
 
     suspend fun drop() {
-        dbQuery { SchemaUtils.drop(Users) }
+        dbQuery {
+            SchemaUtils.drop(
+                Users,
+                ContactRequests,
+                Contacts,
+                BlockedUsers,
+                Chats,
+                Messages,
+                MessagePictureUrls,
+                Participants
+            )
+        }
     }
 
 }

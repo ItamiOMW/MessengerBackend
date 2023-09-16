@@ -29,4 +29,8 @@ object Constants {
 
     const val DEFAULT_TIMEZONE = "UTC"
 
+    const val MILLIS_IN_YEAR = 31_536_000_000L
+    const val MILLIS_IN_MONTH = 2_628_000_000L
+    const val MILLIS_IN_30_MINUTES = 1_800_000L
+
 }

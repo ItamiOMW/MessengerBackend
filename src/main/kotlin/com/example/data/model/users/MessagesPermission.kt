@@ -1,4 +1,4 @@
-package com.example.data.model
+package com.example.data.model.users
 
 enum class MessagesPermission {
     ANYONE,

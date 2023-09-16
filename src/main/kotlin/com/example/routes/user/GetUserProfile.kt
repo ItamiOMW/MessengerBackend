@@ -1,7 +1,7 @@
 package com.example.routes.user
 
 
-import com.example.data.response.ApiResponse
+import com.example.data.response.SuccessfulResponse
 import com.example.service.UserService
 import com.example.util.userId
 import io.ktor.http.*
@@ -22,8 +22,7 @@ fun Route.getUserProfile(userService: UserService) {
 
             call.respond(
                 status = HttpStatusCode.OK,
-                ApiResponse(
-                    successful = true,
+                SuccessfulResponse(
                     message = "Successfully got the user profile.",
                     data = profile
                 )

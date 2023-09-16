@@ -1,7 +1,6 @@
 package com.example.routes.auth
 
-import com.example.data.response.ApiResponse
-import com.example.service.AuthService
+import com.example.data.response.SuccessfulResponse
 import com.example.service.UserService
 import com.example.util.userId
 import io.ktor.http.*
@@ -23,8 +22,7 @@ fun Route.authenticate(
 
             call.respond(
                 HttpStatusCode.OK,
-                ApiResponse(
-                    successful = true,
+                SuccessfulResponse(
                     message = "Authenticated successfully.",
                     data = myUserResponse
                 )

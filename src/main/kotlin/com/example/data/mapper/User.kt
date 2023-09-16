@@ -2,17 +2,13 @@ package com.example.data.mapper
 
 import com.example.data.database.exposed.entity.UserEntity
 import com.example.data.database.exposed.table.Users
-import com.example.data.model.SimpleUser
-import com.example.data.model.UpdateUser
-import com.example.data.model.User
+import com.example.data.response.SimpleUserResponse
+import com.example.data.model.users.UpdateUser
+import com.example.data.model.users.User
 import org.jetbrains.exposed.sql.ResultRow
 import java.time.ZoneOffset
 
-fun ResultRow?.toUser(): User? {
-
-    if (this == null) {
-        return null
-    }
+fun ResultRow.toUser(): User {
 
     return User(
         id = this[Users.id].value,
@@ -26,7 +22,8 @@ fun ResultRow?.toUser(): User? {
         isAdmin = this[Users.isAdmin],
         emailVerificationCode = this[Users.emailVerificationCode],
         passwordResetCode = this[Users.passwordResetCode],
-        isPasswordResetAllowed = this[Users.isPasswordResetAllowed],
+        isPasswordChangeAllowed = this[Users.isPasswordChangeAllowed],
+        isOnline = this[Users.isOnline],
         lastActivity = this[Users.lastActivity],
         messagesPermission = this[Users.messagesPermission]
     )
@@ -43,9 +40,10 @@ fun UserEntity.toUser(): User {
         bio = this.bio,
         profilePictureUrl = this.profilePictureUrl,
         lastActivity = this.lastActivity,
+        isOnline = this.isOnline,
         isActive = this.isActive,
         isAdmin = this.isAdmin,
-        isPasswordResetAllowed = this.isPasswordResetAllowed,
+        isPasswordChangeAllowed = this.isPasswordChangeAllowed,
         emailVerificationCode = this.emailVerificationCode,
         passwordResetCode = this.passwordResetCode,
         messagesPermission = this.messagesPermission,
@@ -63,14 +61,18 @@ fun User.toUpdateUser(): UpdateUser = UpdateUser(
     isActive = this.isActive,
     emailVerificationCode = this.emailVerificationCode,
     passwordResetCode = this.passwordResetCode,
-    isPasswordResetAllowed = this.isPasswordResetAllowed
+    passwordChangeCode = this.passwordChangeCode,
+    isPasswordChangeAllowed = this.isPasswordChangeAllowed,
+    isOnline = this.isOnline,
+    lastActivity = this.lastActivity
 )
 
 
-fun User.toSimpleUserResponse(): SimpleUser = SimpleUser(
+fun User.toSimpleUserResponse(): SimpleUserResponse = SimpleUserResponse(
     id = this.id,
     fullName = this.fullName,
     username = this.username,
     profilePictureUrl = this.profilePictureUrl,
+    isOnline = this.isOnline,
     lastActivity = this.lastActivity.toEpochSecond(ZoneOffset.UTC),
 )

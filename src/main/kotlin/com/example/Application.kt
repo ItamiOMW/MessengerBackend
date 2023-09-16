@@ -16,6 +16,7 @@ fun Application.module() {
     DatabaseFactory.init()
     FirebaseAdmin.init()
 
+    configureCallLogging()
     configureSerialization()
     configureKoin()
     configureResources()

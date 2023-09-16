@@ -2,17 +2,16 @@ package com.example.service
 
 import com.example.authentication.TokenManager
 import com.example.data.mapper.toUpdateUser
-import com.example.data.model.MessagesPermission
-import com.example.data.model.User
+import com.example.data.model.users.MessagesPermission
+import com.example.data.model.users.User
 import com.example.data.repository.user.UserRepository
 import com.example.data.request.*
 import com.example.email.EmailManager
 import com.example.exceptions.*
 import com.example.util.Constants
 import com.example.util.checkPassword
+import com.example.util.getCurrentDateTime
 import com.example.util.hashPassword
-import java.time.Clock
-import java.time.LocalDateTime
 import kotlin.random.Random
 
 class AuthService(
@@ -37,7 +36,8 @@ class AuthService(
             emailVerificationCode = verificationCode,
             isActive = false,
             isAdmin = false,
-            lastActivity = LocalDateTime.now(Clock.systemUTC()),
+            isOnline = false,
+            lastActivity = getCurrentDateTime(),
             messagesPermission = MessagesPermission.ANYONE,
         )
 
@@ -46,20 +46,18 @@ class AuthService(
         simpleEmailManager.sendEmail(
             targetEmail = registerRequest.email,
             message = "Your verification code is $verificationCode.",
-            subject = "Itami Chat verification."
+            subject = "Itami Chat - Email verification."
         )
     }
 
 
     suspend fun loginUser(loginRequest: LoginRequest): Pair<User, String> {
         val user = getUserByEmail(loginRequest.email) ?: throw UnauthorizedException()
-
         if (!user.isActive) {
             throw UserIsNotActiveException()
         }
 
         val doesPasswordsMatch = checkPassword(loginRequest.password, user.hashPassword)
-
         if (!doesPasswordsMatch) {
             throw UnauthorizedException()
         }
@@ -72,9 +70,7 @@ class AuthService(
 
     suspend fun sendEmailVerificationCode(sendVerificationCodeRequest: SendVerificationCodeRequest) {
         val email = sendVerificationCodeRequest.email
-
         val user = getUserByEmail(email) ?: throw UserDoesNotExistException()
-
         val verificationCode = generateCode()
 
         userRepository.updateUser(
@@ -85,16 +81,14 @@ class AuthService(
         simpleEmailManager.sendEmail(
             targetEmail = email,
             message = "Your verification code is $verificationCode.",
-            subject = "Itami Chat - Verification."
+            subject = "Itami Chat - Email verification."
         )
     }
 
 
     suspend fun verifyEmail(verifyEmailRequest: VerifyEmailRequest): Pair<User, String> {
         val user = getUserByEmail(verifyEmailRequest.email) ?: throw UserDoesNotExistException()
-
         val enteredCode = verifyEmailRequest.code
-
         val actualCode = user.emailVerificationCode ?: throw InvalidVerificationCodeException()
 
         if (enteredCode != actualCode) {
@@ -106,38 +100,49 @@ class AuthService(
             id = user.id
         )
 
-        if (!user.isActive) {
-            throw UserIsNotActiveException()
-        }
-
         val token = tokenManager.generateToken(user)
 
         return user to token
     }
 
 
-    suspend fun verifyPasswordResetCode(userId: Int, verifyPasswordResetCodeRequest: VerifyPasswordResetCodeRequest) {
+    suspend fun verifyPasswordChangeCode(
+        userId: Int,
+        verifyPasswordChangeCodeRequest: VerifyPasswordChangeCodeRequest
+    ) {
         val user = getUserById(userId) ?: throw UserDoesNotExistException()
-
-        val enteredCode = verifyPasswordResetCodeRequest.code
-
-        val actualCode = user.passwordResetCode ?: throw InvalidPasswordResetCodeException()
+        val enteredCode = verifyPasswordChangeCodeRequest.code
+        val actualCode = user.passwordResetCode ?: throw InvalidVerificationCodeException()
 
         if (enteredCode != actualCode) {
-            throw InvalidPasswordResetCodeException()
+            throw InvalidVerificationCodeException()
         }
 
         userRepository.updateUser(
-            updateUser = user.toUpdateUser().copy(isPasswordResetAllowed = true, passwordResetCode = null),
+            updateUser = user.toUpdateUser().copy(isPasswordChangeAllowed = true, passwordResetCode = null),
             id = userId
         )
     }
 
 
-    suspend fun sendPasswordResetCode(email: String) {
-
+    suspend fun sendPasswordChangeCode(email: String) {
         val user = getUserByEmail(email) ?: throw UserDoesNotExistException()
+        val verificationCode = generateCode()
 
+        userRepository.updateUser(
+            updateUser = user.toUpdateUser().copy(passwordChangeCode = verificationCode),
+            id = user.id
+        )
+
+        simpleEmailManager.sendEmail(
+            targetEmail = email,
+            message = "Your password change code is $verificationCode.",
+            subject = "Itami Chat - Password change."
+        )
+    }
+
+    suspend fun sendPasswordResetCode(email: String) {
+        val user = getUserByEmail(email) ?: throw UserDoesNotExistException()
         val verificationCode = generateCode()
 
         userRepository.updateUser(
@@ -153,18 +158,33 @@ class AuthService(
     }
 
 
-    suspend fun changePassword(userId: Int, resetPasswordRequest: ResetPasswordRequest) {
+    suspend fun changePassword(userId: Int, changePasswordRequest: ChangePasswordRequest) {
         val user = getUserById(userId) ?: throw UserDoesNotExistException()
 
-        if (!user.isPasswordResetAllowed) {
+        if (!user.isPasswordChangeAllowed) {
             throw PasswordResetNotAllowedException()
+        }
+
+        val newHashedPassword = hashPassword(changePasswordRequest.newPassword)
+
+        userRepository.updateUser(
+            user.toUpdateUser().copy(hashPassword = newHashedPassword, isPasswordChangeAllowed = false),
+            userId
+        )
+    }
+
+    suspend fun resetPassword(resetPasswordRequest: ResetPasswordRequest) {
+        val user = getUserByEmail(resetPasswordRequest.email) ?: throw UserDoesNotExistException()
+
+        if (resetPasswordRequest.passwordResetCode != user.passwordResetCode) {
+            throw InvalidVerificationCodeException()
         }
 
         val newHashedPassword = hashPassword(resetPasswordRequest.newPassword)
 
         userRepository.updateUser(
-            user.toUpdateUser().copy(hashPassword = newHashedPassword, isPasswordResetAllowed = false),
-            userId
+            user.toUpdateUser().copy(hashPassword = newHashedPassword, passwordResetCode = null),
+            user.id
         )
     }
 
