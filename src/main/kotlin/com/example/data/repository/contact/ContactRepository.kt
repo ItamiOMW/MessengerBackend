@@ -26,6 +26,6 @@ interface ContactRepository {
 
     suspend fun cancelContactRequest(contactRequest: ContactRequest)
 
-    suspend fun hasActiveFriendRequest(firstUserId: Int, secondUserId: Int): Boolean
+    suspend fun getActiveContactRequestByUsers(firstUserId: Int, secondUserId: Int): ContactRequest?
 
 }

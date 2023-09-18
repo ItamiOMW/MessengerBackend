@@ -37,6 +37,7 @@ fun Route.chatsWebsocket(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                this.send(Frame.Text("${WebSocketEvent.ERROR}#${e.message}"))
             } finally {
                 chatService.onDisconnect(call.userId(), this)
             }
@@ -66,10 +67,6 @@ private suspend fun handleWebSocket(
         WebSocketEvent.DELETE_CHAT.name -> {
             val deleteChat = gson.fromJsonOrNull(json, DeleteChatRequest::class.java) ?: return
             chatService.deleteChat(userId = ownUserId, deleteChat.id)
-        }
-
-        WebSocketEvent.UPDATE_CHAT.name -> {
-
         }
     }
 }

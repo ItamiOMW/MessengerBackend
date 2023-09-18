@@ -30,6 +30,7 @@ fun Route.updateProfile(userService: UserService, bucket: Bucket, gson: Gson) {
             var profilePictureUrl: String? = null
 
             val userId = call.userId()
+            val user = userService.getMyUser(userId)
 
             multipart.forEachPart { partData ->
                 when (partData) {
@@ -44,6 +45,9 @@ fun Route.updateProfile(userService: UserService, bucket: Bucket, gson: Gson) {
 
                     is PartData.FileItem -> {
                         if (partData.name == "profile_picture") {
+                            user.profilePictureUrl?.let { url ->
+                                bucket.storage.delete(url)
+                            }
                             val (fileName, fileBytes) = partData.convert()
                             bucket.create("${FirebaseStorageUrl.profilePicturePath}/$fileName", fileBytes, "image/png")
                             profilePictureUrl = FirebaseStorageUrl

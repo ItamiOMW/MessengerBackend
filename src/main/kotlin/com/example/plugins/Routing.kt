@@ -56,6 +56,7 @@ fun Application.configureRouting() {
         cancelContactRequest(contactService)
         getContactRequests(contactService)
         getContacts(contactService)
+        deleteContact(contactService)
 
         //Users
         updateProfile(userService, cloudStorageBucket, gson)
@@ -63,6 +64,7 @@ fun Application.configureRouting() {
         getUsersByIds(userService)
         blockUser(blockService)
         unblockUser(blockService)
+        searchUsers(userService)
 
         //Chats
         chatsWebsocket(chatService)

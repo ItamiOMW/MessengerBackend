@@ -116,15 +116,13 @@ class ContactRepositoryImpl : ContactRepository {
         }
     }
 
-    override suspend fun hasActiveFriendRequest(firstUserId: Int, secondUserId: Int): Boolean {
+    override suspend fun getActiveContactRequestByUsers(firstUserId: Int, secondUserId: Int): ContactRequest? {
         return dbQuery {
-            val activeRequests = ContactRequestEntity.find {
+             ContactRequestEntity.find {
                 ((ContactRequests.senderId eq firstUserId) and (ContactRequests.recipientId eq secondUserId)) or
                         (((ContactRequests.senderId eq secondUserId) and (ContactRequests.recipientId eq firstUserId))) and
                         (ContactRequests.status eq ContactRequestStatus.PENDING)
-            }.count()
-
-            return@dbQuery activeRequests > 0
+            }.firstOrNull().toContactRequest()
         }
     }
 

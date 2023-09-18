@@ -8,5 +8,6 @@ data class ContactRequestResponse(
     val id: Int,
     val sender: SimpleUserResponse,
     val recipient: SimpleUserResponse,
-    val status: ContactRequestStatus
+    val status: ContactRequestStatus,
+    val createdAt: Long,
 )

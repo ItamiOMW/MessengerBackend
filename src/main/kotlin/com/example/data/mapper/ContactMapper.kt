@@ -3,6 +3,7 @@ package com.example.data.mapper
 import com.example.data.database.exposed.entity.ContactRequestEntity
 import com.example.data.model.contact.ContactRequest
 import com.example.data.response.ContactRequestResponse
+import com.example.util.toLong
 
 fun ContactRequestEntity?.toContactRequest(): ContactRequest? {
 
@@ -22,7 +23,8 @@ fun ContactRequest.toContactRequestResponse(): ContactRequestResponse = ContactR
     id = this.id,
     sender = this.sender.toSimpleUserResponse(),
     recipient = this.recipient.toSimpleUserResponse(),
-    status = this.status
+    status = this.status,
+    createdAt = this.createdAt.toLong()
 )
 
 

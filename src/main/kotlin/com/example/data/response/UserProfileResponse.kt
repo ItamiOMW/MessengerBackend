@@ -3,7 +3,7 @@ package com.example.data.response
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ProfileResponse(
+data class UserProfileResponse(
     val userId: Int,
     val fullName: String,
     val username: String?,
@@ -11,6 +11,7 @@ data class ProfileResponse(
     val profilePictureUrl: String?,
     val isOwnProfile: Boolean,
     val isContact: Boolean,
+    val contactRequest: ContactRequestResponse?,
     val canSendMessage: Boolean,
     val isBlockedByMe: Boolean,
     val isBlockedByUser: Boolean,

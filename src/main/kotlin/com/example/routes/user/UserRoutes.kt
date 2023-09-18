@@ -8,7 +8,7 @@ object UserRoutes {
 
     private const val USERS = "$API_VERSION/users"
 
-    private const val GET_USERS_BY_IDS = "$USERS/{ids}"
+    private const val SEARCH_FOR_USERS = "$API_VERSION/users/search"
     private const val PROFILE = "$USERS/profile"
     private const val UPDATE_PROFILE = "$PROFILE/update"
     private const val GET_PROFILE = "$PROFILE/{id}"
@@ -17,6 +17,9 @@ object UserRoutes {
 
     @Resource(UPDATE_PROFILE)
     class UpdateProfileRoute()
+
+    @Resource(SEARCH_FOR_USERS)
+    class SearchForUsers
 
     @Resource(GET_PROFILE)
     class GetUserProfileRoute(val id: Int)

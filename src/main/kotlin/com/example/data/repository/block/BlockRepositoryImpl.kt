@@ -47,7 +47,7 @@ class BlockRepositoryImpl : BlockRepository {
     override suspend fun isBlocked(userId: Int, blockedByUserId: Int): Boolean {
         return dbQuery {
             BlockedUsers.select {
-                (BlockedUsers.userId eq userId) and (BlockedUsers.blockedUserId eq blockedByUserId)
+                (BlockedUsers.userId eq blockedByUserId) and (BlockedUsers.blockedUserId eq userId)
             }.count() > 0
         }
     }

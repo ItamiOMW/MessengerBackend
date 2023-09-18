@@ -1,5 +1,6 @@
 package com.example.service
 
+import com.example.data.mapper.toContactRequestResponse
 import com.example.data.mapper.toSimpleUserResponse
 import com.example.data.mapper.toUpdateUser
 import com.example.data.model.contact.ContactRequestStatus
@@ -10,7 +11,7 @@ import com.example.data.repository.contact.ContactRepository
 import com.example.data.repository.user.UserRepository
 import com.example.data.request.UpdateProfileRequest
 import com.example.data.response.MyUserResponse
-import com.example.data.response.ProfileResponse
+import com.example.data.response.UserProfileResponse
 import com.example.data.response.SimpleUserResponse
 import com.example.exceptions.ConflictException
 import com.example.exceptions.NotFoundException
@@ -34,17 +35,17 @@ class UserService(
         val user = getUserById(userId)
 
         updateProfile.username?.let { username ->
-            val isUsernameTaken = userRepository.getUserByUsername(username) != null
+            val userByUsername = userRepository.getUserByUsername(username)
 
-            if (isUsernameTaken) {
+            if (userByUsername != null && userByUsername.id != userId) {
                 throw ConflictException("Username is already taken.")
             }
         }
 
         val updateUser = user.toUpdateUser().copy(
-            fullName = updateProfile.fullName?.trim() ?: user.fullName,
-            username = updateProfile.username?.trim(),
-            bio = updateProfile.bio?.trim(),
+            fullName = updateProfile.fullName?.trim()?.ifBlank { user.fullName } ?: user.fullName,
+            username = updateProfile.username?.trim()?.ifBlank { null },
+            bio = updateProfile.bio?.trim()?.ifBlank { null },
             profilePictureUrl = profilePictureUrl ?: user.profilePictureUrl
         )
 
@@ -74,21 +75,25 @@ class UserService(
         )
     }
 
-    suspend fun searchForUsersByUsername(username: String): List<User> {
+    suspend fun searchForUsersByUsername(userId: Int, username: String): List<SimpleUserResponse> {
         return userRepository.searchUsersByUsername(username)
+            .filter { it.id != userId }
+            .map { it.toSimpleUserResponse() }
     }
 
-    suspend fun getProfile(userId: Int, userIdToGetProfile: Int): ProfileResponse {
-        val user = getUserById(userId)
+    suspend fun getProfile(userId: Int, userIdToGetProfile: Int): UserProfileResponse {
+        val user = getUserById(userIdToGetProfile)
 
-        val isBlockedByMe = blockRepository.isBlocked(userId, userIdToGetProfile)
-        val isBlockedByUser = blockRepository.isBlocked(userIdToGetProfile, userId)
+        val isBlockedByMe = blockRepository.isBlocked(userIdToGetProfile, userId)
+        val isBlockedByUser = blockRepository.isBlocked(userId, userIdToGetProfile)
         val areContacts = contactRepository.areContacts(userId, userIdToGetProfile)
 
         val canSendMessage = !(isBlockedByUser or isBlockedByMe or
                 (user.messagesPermission == MessagesPermission.CONTACTS_ONLY && !areContacts))
 
-        return ProfileResponse(
+        val contactRequest = contactRepository.getActiveContactRequestByUsers(userId, userIdToGetProfile)
+
+        return UserProfileResponse(
             userId = user.id,
             fullName = user.fullName,
             username = user.username,
@@ -96,6 +101,7 @@ class UserService(
             profilePictureUrl = user.profilePictureUrl,
             isOwnProfile = userId == userIdToGetProfile,
             isContact = areContacts,
+            contactRequest = contactRequest?.toContactRequestResponse(),
             canSendMessage = canSendMessage,
             isBlockedByMe = isBlockedByMe,
             isBlockedByUser = isBlockedByUser,

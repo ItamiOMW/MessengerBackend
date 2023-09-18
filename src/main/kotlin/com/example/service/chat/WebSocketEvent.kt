@@ -11,4 +11,5 @@ enum class WebSocketEvent {
     DELETE_CHAT_PARTICIPANT,
     ADD_CHAT_PARTICIPANTS,
     LEAVE_CHAT,
+    ERROR,
 }

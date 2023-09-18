@@ -2,6 +2,7 @@ package com.example.service
 
 import com.example.data.mapper.toContactRequestResponse
 import com.example.data.mapper.toSimpleUserResponse
+import com.example.data.model.contact.Contact
 import com.example.data.model.contact.ContactRequestStatus
 import com.example.data.repository.contact.ContactRepository
 import com.example.data.repository.user.UserRepository
@@ -31,9 +32,9 @@ class ContactService(
             throw ConflictException("You are already contacts.")
         }
 
-        val hasActiveRequests = contactRepository.hasActiveFriendRequest(senderId, recipientId)
+        val hasActiveContactRequests = contactRepository.getActiveContactRequestByUsers(senderId, recipientId) != null
 
-        if (hasActiveRequests) {
+        if (hasActiveContactRequests) {
             throw ConflictException("You already have an active contact request with this user.")
         }
 
@@ -82,6 +83,9 @@ class ContactService(
         contactRepository.cancelContactRequest(contactRequest)
     }
 
+    suspend fun deleteContact(userId: Int, contactIdToDelete: Int) {
+        contactRepository.deleteContact(Contact(userId, contactIdToDelete))
+    }
 
     suspend fun getContactRequests(userId: Int): List<ContactRequestResponse> {
         return contactRepository.getContactRequestsByUserId(userId)

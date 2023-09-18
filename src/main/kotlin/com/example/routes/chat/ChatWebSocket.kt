@@ -44,6 +44,7 @@ fun Route.chatWebsocket(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                this.send(Frame.Text("${WebSocketEvent.ERROR}#${e.message}"))
             } finally {
                 chatService.onDisconnectFromChat(this)
             }

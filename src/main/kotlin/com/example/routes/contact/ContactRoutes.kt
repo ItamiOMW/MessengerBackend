@@ -6,6 +6,7 @@ import io.ktor.resources.*
 object ContactRoutes {
 
     private const val CONTACTS = "$API_VERSION/contacts"
+    private const val CONTACT = "$API_VERSION/contacts/{userId}"
 
     private const val REQUESTS = "$CONTACTS/requests"
 
@@ -17,6 +18,9 @@ object ContactRoutes {
 
     @Resource(CONTACTS)
     class GetContacts
+
+    @Resource(CONTACT)
+    class Contact(val userId: Int)
 
     @Resource(CONTACTS_SEND_REQUEST)
     class SendContactRequestRoute(val id: Int)
