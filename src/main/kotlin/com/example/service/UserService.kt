@@ -58,6 +58,7 @@ class UserService(
         val user = getUserById(userId)
 
         val activeContactRequestsCount = contactRepository.getContactRequestsByUserId(userId)
+            .filter { it.recipient.id == userId }
             .count { it.status == ContactRequestStatus.PENDING }
 
         val blockedUsersCount = blockRepository.getBlockedUsers(userId).count()
@@ -112,6 +113,10 @@ class UserService(
 
     suspend fun getUsersByIds(userId: Int, ids: List<Int>): List<SimpleUserResponse> {
         return userRepository.getUsersByIds(ids).map { it.toSimpleUserResponse() }
+    }
+
+    suspend fun getBlockedUsers(userId: Int): List<SimpleUserResponse> {
+        return blockRepository.getBlockedUsers(userId).map { it.toSimpleUserResponse() }
     }
 
 }

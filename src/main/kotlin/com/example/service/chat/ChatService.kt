@@ -4,6 +4,7 @@ import com.example.data.mapper.toChatParticipantResponse
 import com.example.data.mapper.toChatResponse
 import com.example.data.mapper.toMessageResponse
 import com.example.data.model.chat.*
+import com.example.data.model.users.MessagesPermission
 import com.example.data.repository.block.BlockRepository
 import com.example.data.repository.chat.ChatRepository
 import com.example.data.repository.contact.ContactRepository
@@ -223,6 +224,10 @@ class ChatService(
 
             val isBlockedByUser = blockRepository.isBlocked(userId, dialogUser.id)
             val isBlockedByMe = blockRepository.isBlocked(dialogUser.id, userId)
+            val areContacts = contactRepository.areContacts(userId, dialogUser.id)
+            if (dialogUser.messagesPermission == MessagesPermission.CONTACTS_ONLY && !areContacts) {
+                throw ForbiddenException("Only contacts can send message to this user.")
+            }
 
             if (isBlockedByUser) {
                 throw ForbiddenException("The user has blocked you.")

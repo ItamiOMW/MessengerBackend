@@ -20,6 +20,14 @@ class AuthService(
     private val tokenManager: TokenManager
 ) {
 
+    suspend fun changeMessagesPermission(userId: Int, changeMessagesPermissionRequest: ChangeMessagesPermissionRequest) {
+        userRepository.changeMessagesPermission(userId, changeMessagesPermissionRequest.messagesPermission)
+    }
+
+    suspend fun deleteAccount(userId: Int) {
+        userRepository.deleteUser(userId)
+    }
+
     suspend fun createUserAndSendVerificationCode(registerRequest: RegisterRequest) {
         val doesUserExists = getUserByEmail(registerRequest.email) != null
 
@@ -112,14 +120,14 @@ class AuthService(
     ) {
         val user = getUserById(userId) ?: throw UserDoesNotExistException()
         val enteredCode = verifyPasswordChangeCodeRequest.code
-        val actualCode = user.passwordResetCode ?: throw InvalidVerificationCodeException()
+        val actualCode = user.passwordChangeCode ?: throw InvalidVerificationCodeException()
 
         if (enteredCode != actualCode) {
             throw InvalidVerificationCodeException()
         }
 
         userRepository.updateUser(
-            updateUser = user.toUpdateUser().copy(isPasswordChangeAllowed = true, passwordResetCode = null),
+            updateUser = user.toUpdateUser().copy(isPasswordChangeAllowed = true, passwordChangeCode = null),
             id = userId
         )
     }
@@ -156,7 +164,6 @@ class AuthService(
             subject = "Itami Chat - Password reset."
         )
     }
-
 
     suspend fun changePassword(userId: Int, changePasswordRequest: ChangePasswordRequest) {
         val user = getUserById(userId) ?: throw UserDoesNotExistException()

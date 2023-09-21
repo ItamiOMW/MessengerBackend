@@ -22,6 +22,7 @@ fun ResultRow.toUser(): User {
         isAdmin = this[Users.isAdmin],
         emailVerificationCode = this[Users.emailVerificationCode],
         passwordResetCode = this[Users.passwordResetCode],
+        passwordChangeCode = this[Users.passwordChangeCode],
         isPasswordChangeAllowed = this[Users.isPasswordChangeAllowed],
         isOnline = this[Users.isOnline],
         lastActivity = this[Users.lastActivity],
@@ -46,6 +47,7 @@ fun UserEntity.toUser(): User {
         isPasswordChangeAllowed = this.isPasswordChangeAllowed,
         emailVerificationCode = this.emailVerificationCode,
         passwordResetCode = this.passwordResetCode,
+        passwordChangeCode = this.passwordChangeCode,
         messagesPermission = this.messagesPermission,
     )
 

@@ -68,7 +68,7 @@ class ContactRepositoryImpl : ContactRepository {
     override suspend fun getContactRequestsByUserId(userId: Int): List<ContactRequest> {
         return dbQuery {
             ContactRequestEntity.find {
-                ContactRequests.recipientId eq userId
+                (ContactRequests.recipientId eq userId) or (ContactRequests.senderId eq userId)
             }.mapNotNull { it.toContactRequest() }
         }
     }
@@ -76,14 +76,6 @@ class ContactRepositoryImpl : ContactRepository {
     override suspend fun getContactRequestById(id: Int): ContactRequest? {
         return dbQuery {
             ContactRequestEntity.findById(id).toContactRequest()
-        }
-    }
-
-    override suspend fun getMyContactRequestsByUserId(userId: Int): List<ContactRequest> {
-        return dbQuery {
-            ContactRequestEntity.find {
-                ContactRequests.senderId eq userId
-            }.mapNotNull { it.toContactRequest() }
         }
     }
 

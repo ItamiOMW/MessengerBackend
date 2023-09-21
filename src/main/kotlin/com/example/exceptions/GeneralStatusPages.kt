@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException
 
 fun StatusPagesConfig.generalStatusPages() {
     exception<AppException> { call, cause ->
+        cause.printStackTrace()
         call.respond(
             status = cause.httpStatusCode,
             message = FailedResponse(
@@ -22,6 +23,7 @@ fun StatusPagesConfig.generalStatusPages() {
         invocationTargetException.cause?.printStackTrace()
     }
     exception<RequestValidationException> { call, cause ->
+        cause.printStackTrace()
         call.respond(
             status = HttpStatusCode.BadRequest,
             message = FailedResponse(

@@ -8,15 +8,16 @@ object UserRoutes {
 
     private const val USERS = "$API_VERSION/users"
 
-    private const val SEARCH_FOR_USERS = "$API_VERSION/users/search"
+    private const val SEARCH_FOR_USERS = "$USERS/search"
     private const val PROFILE = "$USERS/profile"
     private const val UPDATE_PROFILE = "$PROFILE/update"
     private const val GET_PROFILE = "$PROFILE/{id}"
     private const val BLOCK_USER = "$USERS/{id}/block"
     private const val UNBLOCK_USER = "$USERS/{id}/unblock"
+    private const val BLOCKED_USERS = "$USERS/blocked"
 
     @Resource(UPDATE_PROFILE)
-    class UpdateProfileRoute()
+    class UpdateProfileRoute
 
     @Resource(SEARCH_FOR_USERS)
     class SearchForUsers
@@ -33,5 +34,7 @@ object UserRoutes {
     @Resource(UNBLOCK_USER)
     class UnblockUserRoute(val id: Int)
 
+    @Resource(BLOCKED_USERS)
+    class BlockedUsers
 
 }

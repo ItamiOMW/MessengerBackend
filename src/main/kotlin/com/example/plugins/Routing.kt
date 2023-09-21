@@ -48,6 +48,8 @@ fun Application.configureRouting() {
         verifyPasswordChangeCode(authService)
         changePassword(authService)
         resetPassword(authService)
+        deleteAccount(authService)
+        changeMessagesPermission(authService)
 
         //Contacts
         sendContactRequest(contactService)
@@ -65,6 +67,7 @@ fun Application.configureRouting() {
         blockUser(blockService)
         unblockUser(blockService)
         searchUsers(userService)
+        getBlockedUsers(userService)
 
         //Chats
         chatsWebsocket(chatService)

@@ -18,6 +18,15 @@ object AuthRoutes {
     private const val AUTH_SEND_PASSWORD_RESET_CODE = "$AUTH/send-password-reset-code"
     private const val AUTH_CHANGE_PASSWORD = "$AUTH/change-password"
     private const val AUTH_RESET_PASSWORD = "$AUTH/reset-password"
+    private const val AUTH_ACCOUNT = "$AUTH/account"
+    private const val AUTH_MESSAGES_PERMISSION = "$AUTH_ACCOUNT/permission/messages"
+
+
+    @Resource(AUTH_ACCOUNT)
+    class AccountRoute
+
+    @Resource(AUTH_MESSAGES_PERMISSION)
+    class MessagesPermission
 
     @Resource(AUTH_REGISTER)
     class UserRegisterRoute

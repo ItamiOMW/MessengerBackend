@@ -4,6 +4,7 @@ import com.example.data.database.exposed.DatabaseFactory.dbQuery
 import com.example.data.database.exposed.entity.UserEntity
 import com.example.data.database.exposed.table.Users
 import com.example.data.mapper.toUser
+import com.example.data.model.users.MessagesPermission
 import com.example.data.model.users.UpdateUser
 import com.example.data.model.users.User
 import com.example.util.getCurrentDateTime
@@ -50,6 +51,20 @@ class UserRepositoryImpl : UserRepository {
             }
 
             userEntity?.toUser()
+        }
+    }
+
+    override suspend fun deleteUser(userId: Int) {
+        dbQuery {
+            UserEntity.findById(userId)?.delete()
+        }
+    }
+
+    override suspend fun changeMessagesPermission(userId: Int, permission: MessagesPermission) {
+        dbQuery {
+            UserEntity.findById(userId)?.let {
+                it.messagesPermission = permission
+            }
         }
     }
 

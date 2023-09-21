@@ -18,8 +18,6 @@ interface ContactRepository {
 
     suspend fun getContactRequestById(id: Int): ContactRequest?
 
-    suspend fun getMyContactRequestsByUserId(userId: Int): List<ContactRequest>
-
     suspend fun areContacts(userId: Int, contactId: Int): Boolean
 
     suspend fun deleteContact(contact: Contact)

@@ -1,5 +1,6 @@
 package com.example.data.repository.user
 
+import com.example.data.model.users.MessagesPermission
 import com.example.data.model.users.UpdateUser
 import com.example.data.model.users.User
 
@@ -8,6 +9,10 @@ interface UserRepository {
     suspend fun createUser(user: User)
 
     suspend fun updateUser(updateUser: UpdateUser, id: Int): User?
+
+    suspend fun deleteUser(userId: Int)
+
+    suspend fun changeMessagesPermission(userId: Int, permission: MessagesPermission)
 
     suspend fun setUserOnlineStatus(id: Int, isOnline: Boolean)
 
