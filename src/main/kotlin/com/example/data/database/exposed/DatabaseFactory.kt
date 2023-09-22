@@ -33,11 +33,9 @@ object DatabaseFactory {
         val config = HikariConfig()
         config.driverClassName = System.getenv(Constants.JDBC_DRIVER_KEY)
         config.jdbcUrl = System.getenv(Constants.DATABASE_URL_KEY)
-        config.username = System.getenv(Constants.DATABASE_USERNAME_KEY)
-        config.password = System.getenv(Constants.DATABASE_PASSWORD_KEY)
         config.maximumPoolSize = 3
         config.isAutoCommit = false
-        config.transactionIsolation = System.getenv(Constants.TRANSACTION_ISOLATION_KEY)
+        config.transactionIsolation = "TRANSACTION_REPEATABLE_READ"
         config.validate()
 
         return HikariDataSource(config)
