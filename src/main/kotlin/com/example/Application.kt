@@ -13,7 +13,7 @@ const val API_VERSION = "/api/v1"
 
 @Suppress("unused")
 fun Application.module() {
-    DatabaseFactory.init()
+    DatabaseFactory.init(environment.config)
     FirebaseAdmin.init()
 
     configureCallLogging()
