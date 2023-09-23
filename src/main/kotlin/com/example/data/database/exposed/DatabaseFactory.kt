@@ -33,6 +33,8 @@ object DatabaseFactory {
         val config = HikariConfig()
         config.driverClassName = appConfig.property("storage.driverClassName").getString()
         config.jdbcUrl = appConfig.property("storage.jdbcURL").getString()
+        config.password = appConfig.property("storage.password").getString()
+        config.username = appConfig.property("storage.user").getString()
         config.maximumPoolSize = 3
         config.isAutoCommit = false
         config.transactionIsolation = "TRANSACTION_REPEATABLE_READ"
