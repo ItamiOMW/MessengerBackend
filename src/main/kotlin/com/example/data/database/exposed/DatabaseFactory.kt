@@ -1,9 +1,9 @@
 package com.example.data.database.exposed
 
 import com.example.data.database.exposed.table.*
-import com.example.util.Constants
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import io.ktor.server.config.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
@@ -12,8 +12,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object DatabaseFactory {
 
-    fun init() {
-        Database.connect(hikari())
+    fun init(appConfig: ApplicationConfig) {
+        Database.connect(hikari(appConfig))
 
         transaction {
             SchemaUtils.create(Users)
@@ -29,10 +29,10 @@ object DatabaseFactory {
     }
 
 
-    private fun hikari(): HikariDataSource {
+    private fun hikari(appConfig: ApplicationConfig): HikariDataSource {
         val config = HikariConfig()
-        config.driverClassName = System.getenv(Constants.JDBC_DRIVER_KEY)
-        config.jdbcUrl = System.getenv(Constants.DATABASE_URL_KEY)
+        config.driverClassName = appConfig.property("storage.driverClassName").getString()
+        config.jdbcUrl = appConfig.property("storage.jdbcURL").getString()
         config.maximumPoolSize = 3
         config.isAutoCommit = false
         config.transactionIsolation = "TRANSACTION_REPEATABLE_READ"
