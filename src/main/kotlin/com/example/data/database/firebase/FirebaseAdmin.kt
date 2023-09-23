@@ -8,11 +8,14 @@ import java.io.InputStream
 
 object FirebaseAdmin {
 
-    private val serviceAccount: InputStream? =
-        this::class.java.classLoader.getResourceAsStream("itami-chat-images-firebase-adminsdk-x1l8u-e6f032d302.json")
+//    private val serviceAccount: InputStream? =
+//        this::class.java.classLoader.getResourceAsStream("itami-chat-images-firebase-adminsdk-x1l8u-e6f032d302.json")
+
+    private val firebaseAdminSdk: InputStream = System.getenv("FIREBASE_ADMIN_SDK").byteInputStream()
+
 
     private val options: FirebaseOptions = FirebaseOptions.builder()
-        .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+        .setCredentials(GoogleCredentials.fromStream(firebaseAdminSdk))
         .setStorageBucket(Constants.STORAGE_BUCKET)
         .build()
 
