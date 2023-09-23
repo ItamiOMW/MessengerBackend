@@ -31,7 +31,7 @@ repositories {
 
 ktor {
     fatJar {
-        archiveFileName.set("fat.jar")
+        archiveFileName.set("ktor-itami-chat.jar")
     }
 }
 
