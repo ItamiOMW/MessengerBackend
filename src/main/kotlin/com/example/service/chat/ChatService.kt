@@ -49,11 +49,7 @@ class ChatService(
     }
 
     suspend fun createChat(creatorId: Int, createChatRequest: CreateChatRequest, pictureUrl: String?): ChatResponse {
-        val users = userRepository.getUsersByIds(createChatRequest.participantIds + creatorId).filter {
-            if (it.id != creatorId) {
-                contactRepository.areContacts(creatorId, it.id)
-            } else true
-        }
+        val users = userRepository.getUsersByIds(createChatRequest.participantIds + creatorId)
         val chat = chatRepository.createChat(
             Chat(
                 name = createChatRequest.name,

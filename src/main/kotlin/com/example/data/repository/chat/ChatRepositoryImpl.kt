@@ -39,8 +39,8 @@ class ChatRepositoryImpl : ChatRepository {
 
     override suspend fun isChatParticipant(chatId: Int, userId: Int): Boolean {
         return dbQuery {
-            (Participants innerJoin Chats)
-                .select { (Chats.id eq chatId) and (Participants.userId eq userId) }
+            Participants
+                .select { (Participants.chatId eq chatId) and (Participants.userId eq userId) }
                 .count() > 0
         }
     }
